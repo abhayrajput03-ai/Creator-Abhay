@@ -3,24 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Creator Abhay Raj | Professional Web Solutions & Instant Calculator</title>
-    <meta name="description" content="Creator Abhay Raj - Professional Web Development Services. Trusted digital solutions and instant pricing calculator.">
+    <title>Creator Abhayraj | Elite Web Engineering, AI Assistant & Premium Services</title>
+    <meta name="description" content="Creator Abhayraj - Professional Web Development Services, AI Assistant, Premium Club, Instant Calculator, and Secure Hosting.">
     
-    <!-- Google Fonts for High-Tech & Professional Typography -->
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 
     <style>
-        /* ==========================================================================
-           CSS RESET & PROFESSIONAL VARIABLES
-           ========================================================================== */
         :root {
             --bg-color: #030305;
             --text-main: #f4f4f8;
             --text-muted: #94a3b8;
             --accent-primary: #00f3ff;
             --accent-secondary: #7928ca;
+            --accent-purple: #9d4edd;
             --glass-bg: rgba(18, 18, 28, 0.65);
             --glass-border: rgba(255, 255, 255, 0.08);
             --font-display: 'Orbitron', sans-serif;
@@ -54,9 +52,6 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* ==========================================================================
-           BACKGROUND CANVAS SYSTEM
-           ========================================================================== */
         #particle-canvas {
             position: fixed;
             top: 0;
@@ -76,9 +71,39 @@
             pointer-events: none;
         }
 
-        /* ==========================================================================
-           REUSABLE UTILITIES & LAYOUT
-           ========================================================================== */
+        /* STICKY INSTAGRAM BAR */
+        .sticky-insta-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(3, 3, 5, 0.92);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--glass-border);
+            z-index: 1005;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 6px 15px;
+            font-family: var(--font-display);
+            font-size: 0.82rem;
+            letter-spacing: 1px;
+        }
+
+        .sticky-insta-bar a {
+            color: var(--accent-primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: var(--transition-smooth);
+        }
+
+        .sticky-insta-bar a:hover {
+            color: #fff;
+            text-shadow: 0 0 10px var(--accent-primary);
+        }
+
         .container {
             width: 100%;
             max-width: 1300px;
@@ -156,14 +181,27 @@
         .btn:hover {
             box-shadow: 0 6px 25px rgba(0, 243, 255, 0.5);
             transform: translateY(-2px);
+            color: #030305;
         }
 
-        /* ==========================================================================
-           NAVIGATION BAR
-           ========================================================================== */
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--accent-primary);
+            color: var(--accent-primary);
+            box-shadow: inset 0 0 10px rgba(0, 243, 255, 0.15), 0 0 10px rgba(0, 243, 255, 0.15);
+        }
+
+        .btn-outline:hover {
+            background: rgba(0, 243, 255, 0.1);
+            color: #fff;
+            box-shadow: inset 0 0 20px rgba(0, 243, 255, 0.3), 0 0 20px rgba(0, 243, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* NAVIGATION BAR */
         header {
             position: fixed;
-            top: 0; left: 0; width: 100%;
+            top: 32px; left: 0; width: 100%;
             height: var(--nav-height);
             z-index: 1000;
             transition: var(--transition-smooth);
@@ -186,7 +224,7 @@
 
         .logo {
             font-family: var(--font-display);
-            font-size: clamp(1.3rem, 2.5vw, 1.6rem);
+            font-size: clamp(1.2rem, 2.2vw, 1.5rem);
             font-weight: 900;
             color: #fff;
             text-decoration: none;
@@ -197,8 +235,8 @@
         }
 
         .logo-icon {
-            width: 32px;
-            height: 32px;
+            width: 30px;
+            height: 30px;
             fill: none;
             stroke: var(--accent-primary);
             stroke-width: 2;
@@ -210,7 +248,7 @@
         .nav-links {
             display: flex;
             list-style: none;
-            gap: 2rem;
+            gap: 1.5rem;
             align-items: center;
         }
 
@@ -218,7 +256,7 @@
             color: var(--text-main);
             text-decoration: none;
             font-family: var(--font-code);
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             text-transform: uppercase;
             letter-spacing: 1px;
             position: relative;
@@ -255,9 +293,7 @@
             z-index: 1001;
         }
 
-        /* ==========================================================================
-           HOME / HERO SECTION
-           ========================================================================== */
+        /* HERO SECTION */
         #home {
             min-height: 100vh;
             display: flex;
@@ -265,7 +301,7 @@
             justify-content: center;
             position: relative;
             overflow: hidden;
-            padding: calc(var(--nav-height) + 2rem) 0 4rem;
+            padding: calc(var(--nav-height) + 4rem) 0 4rem;
         }
 
         .hero-content {
@@ -292,7 +328,7 @@
 
         .hero-title {
             font-family: var(--font-display);
-            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-size: clamp(2.3rem, 5.5vw, 4.2rem);
             font-weight: 900;
             line-height: 1.1;
             margin-bottom: 1.2rem;
@@ -303,7 +339,7 @@
         }
 
         .hero-subtitle {
-            font-size: clamp(1.1rem, 2.5vw, 1.35rem);
+            font-size: clamp(1.1rem, 2.2vw, 1.35rem);
             color: var(--text-muted);
             margin-bottom: 2.2rem;
             font-family: var(--font-code);
@@ -328,27 +364,7 @@
             flex-wrap: wrap;
         }
 
-        .btn-outline {
-            background: transparent;
-            border: 2px solid var(--accent-primary);
-            color: var(--accent-primary);
-            box-shadow: inset 0 0 10px rgba(0, 243, 255, 0.15), 0 0 10px rgba(0, 243, 255, 0.15);
-        }
-
-        .btn-outline:hover {
-            background: rgba(0, 243, 255, 0.1);
-            color: #fff;
-            box-shadow: inset 0 0 20px rgba(0, 243, 255, 0.3), 0 0 20px rgba(0, 243, 255, 0.3);
-            transform: translateY(-2px);
-        }
-
-        /* ==========================================================================
-           INSTANT WEBSITE PRICING CALCULATOR & CHECKOUT SECTION
-           ========================================================================== */
-        #calculator {
-            position: relative;
-        }
-
+        /* PRICING CALCULATOR */
         .calculator-wrapper {
             max-width: 750px;
             margin: 0 auto;
@@ -457,7 +473,6 @@
             text-shadow: 0 0 15px rgba(0, 243, 255, 0.5);
         }
 
-        /* Dynamic Multiple Pages Direct Contact Action Area */
         .multiple-pages-action-box {
             display: none;
             text-align: center;
@@ -495,6 +510,7 @@
         .direct-call-action-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 25px rgba(121, 40, 202, 0.6);
+            color: #fff;
         }
 
         @keyframes fadeIn {
@@ -613,22 +629,12 @@
             box-shadow: 0 0 15px var(--accent-primary);
         }
 
-        /* ==========================================================================
-           ABOUT US SECTION
-           ========================================================================== */
-        #about {
-            position: relative;
-        }
-
+        /* ABOUT SECTION */
         .about-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 3rem;
             align-items: center;
-        }
-
-        .about-image-wrapper {
-            position: relative;
         }
 
         .about-graphic {
@@ -713,13 +719,7 @@
             letter-spacing: 1px;
         }
 
-        /* ==========================================================================
-           SERVICES SECTION
-           ========================================================================== */
-        #services {
-            position: relative;
-        }
-
+        /* SERVICES SECTION */
         .services-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -735,7 +735,6 @@
             position: relative;
             overflow: hidden;
             transition: var(--transition-smooth);
-            cursor: pointer;
         }
 
         .service-card:hover {
@@ -799,13 +798,160 @@
             font-weight: bold;
         }
 
-        /* ==========================================================================
-           FEEDBACK SECTION (New Professional Feature - Max 150 words)
-           ========================================================================== */
-        #feedback {
+        /* PREMIUM CLUB SECTION */
+        .premium-card {
+            max-width: 550px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            border: 2px solid var(--accent-primary);
+            background: linear-gradient(135deg, rgba(0, 243, 255, 0.04), rgba(121, 40, 202, 0.04));
             position: relative;
+            overflow: hidden;
+            text-align: center;
         }
 
+        .premium-card::before {
+            content: 'VIP ELITE';
+            position: absolute;
+            top: 20px;
+            right: -35px;
+            background: var(--accent-primary);
+            color: #030305;
+            font-family: var(--font-display);
+            font-size: 0.65rem;
+            font-weight: 900;
+            padding: 5px 35px;
+            transform: rotate(45deg);
+            letter-spacing: 1px;
+        }
+
+        .premium-price {
+            font-family: var(--font-display);
+            font-size: 2.8rem;
+            font-weight: 900;
+            color: #fff;
+            margin: 1.5rem 0;
+            text-shadow: 0 0 20px rgba(0, 243, 255, 0.4);
+        }
+
+        .premium-price span {
+            font-size: 1rem;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .premium-features {
+            list-style: none;
+            text-align: left;
+            margin: 2rem 0;
+        }
+
+        .premium-features li {
+            margin-bottom: 1rem;
+            color: var(--text-main);
+            font-size: 1.05rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .premium-features li::before {
+            content: '👑';
+        }
+
+        /* AI ASSISTANT SECTION */
+        .ai-assistant-wrapper {
+            max-width: 800px;
+            margin: 0 auto;
+            height: 520px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            text-align: left;
+            }
+
+        .message {
+            padding: 12px 18px;
+            border-radius: 12px;
+            max-width: 80%;
+            font-size: 0.98rem;
+            line-height: 1.5;
+        }
+
+        .message.bot {
+            background: rgba(0, 243, 255, 0.08);
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            color: #fff;
+            align-self: flex-start;
+        }
+
+        .message.user {
+            background: rgba(121, 40, 202, 0.2);
+            border: 1px solid rgba(121, 40, 202, 0.4);
+            color: #fff;
+            align-self: flex-end;
+        }
+
+        .chat-input-area {
+            display: flex;
+            padding: 15px 20px;
+            background: rgba(3, 3, 5, 0.95);
+            border-top: 1px solid var(--glass-border);
+            gap: 12px;
+        }
+
+        .chat-input-area input {
+            flex: 1;
+            padding: 12px 16px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            color: #fff;
+            font-family: var(--font-body);
+            font-size: 1rem;
+            outline: none;
+            transition: var(--transition-smooth);
+        }
+
+        .chat-input-area input:focus {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 12px rgba(0, 243, 255, 0.2);
+        }
+
+        /* POLICY / CANCELLATION BOX */
+        .policy-box {
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 2.5rem;
+            background: rgba(255, 70, 70, 0.04);
+            border: 1px solid rgba(255, 70, 70, 0.25);
+            text-align: left;
+        }
+
+        .policy-box h3 {
+            font-family: var(--font-display);
+            color: #ff5c5c;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .policy-box p {
+            color: var(--text-muted);
+            font-size: 1.02rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        /* FEEDBACK SECTION */
         .feedback-wrapper {
             max-width: 700px;
             margin: 0 auto;
@@ -820,13 +966,7 @@
             margin-top: 0.4rem;
         }
 
-        /* ==========================================================================
-           CONTACT SECTION
-           ========================================================================== */
-        #contact {
-            position: relative;
-        }
-
+        /* CONTACT SECTION */
         .contact-wrapper {
             display: grid;
             grid-template-columns: 1fr 1.4fr;
@@ -887,7 +1027,7 @@
             letter-spacing: 1px;
         }
 
-        .contact-details a, .contact-detailsspan {
+        .contact-details a {
             color: var(--accent-primary);
             text-decoration: none;
             font-size: 1.05rem;
@@ -940,9 +1080,7 @@
             min-height: 130px;
         }
 
-        /* ==========================================================================
-           PERSISTENT CONTACT STRIP
-           ========================================================================== */
+        /* PERSISTENT CONTACT STRIP */
         .contact-strip {
             background: linear-gradient(90deg, rgba(3,3,5,0.95), rgba(13,13,21,0.95));
             border-top: 1px solid rgba(0, 243, 255, 0.25);
@@ -978,9 +1116,66 @@
             text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
         }
 
-        /* ==========================================================================
-           FOOTER
-           ========================================================================== */
+        /* STICKY INTERACTIVE MASCOT CHARACTER */
+        #sticky-mascot {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            pointer-events: none;
+        }
+
+        .mascot-speech-bubble {
+            background: var(--glass-bg);
+            border: 1px solid var(--accent-primary);
+            backdrop-filter: blur(10px);
+            color: #fff;
+            padding: 10px 15px;
+            border-radius: 12px;
+            font-family: var(--font-display);
+            font-size: 0.75rem;
+            max-width: 220px;
+            margin-bottom: 8px;
+            box-shadow: 0 5px 20px rgba(0, 243, 255, 0.3);
+            animation: floatBubble 3s ease-in-out infinite;
+            pointer-events: auto;
+            text-align: center;
+        }
+
+        .mascot-avatar {
+            width: 65px;
+            height: 65px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            box-shadow: 0 0 25px rgba(0, 243, 255, 0.5);
+            pointer-events: auto;
+            cursor: pointer;
+            animation: mascotJump 2s infinite ease-in-out, mascotSmile 4s infinite alternate;
+        }
+
+        @keyframes mascotJump {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+
+        @keyframes mascotSmile {
+            0% { filter: hue-rotate(0deg); }
+            100% { filter: hue-rotate(45deg); }
+        }
+
+        @keyframes floatBubble {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
+
+        /* FOOTER */
         footer {
             background: #010103;
             padding: 2.5rem 0;
@@ -1035,9 +1230,7 @@
             color: var(--accent-primary);
         }
 
-        /* ==========================================================================
-           RESPONSIVE MEDIA QUERIES
-           ========================================================================== */
+        /* RESPONSIVE MEDIA QUERIES */
         @media screen and (max-width: 992px) {
             .about-grid, .contact-wrapper {
                 grid-template-columns: 1fr;
@@ -1049,10 +1242,10 @@
         @media screen and (max-width: 768px) {
             .nav-links {
                 position: fixed;
-                top: var(--nav-height);
+                top: calc(var(--nav-height) + 32px);
                 left: -100%;
                 width: 100%;
-                height: calc(100vh - var(--nav-height));
+                height: calc(100vh - var(--nav-height) - 32px);
                 background: rgba(3, 3, 5, 0.98);
                 backdrop-filter: blur(20px);
                 flex-direction: column;
@@ -1067,10 +1260,9 @@
             .hero-cta-group { flex-direction: column; width: 100%; }
             .hero-cta-group .btn { width: 100%; }
             .form-row { grid-template-columns: 1fr; }
-            .calculator-wrapper, .contact-info-panel, .order-form-panel, .feedback-wrapper { padding: 1.5rem; }
+            .calculator-wrapper, .contact-info-panel, .order-form-panel, .feedback-wrapper, .policy-box { padding: 1.5rem; }
         }
 
-        /* Reveal Animation Classes */
         .reveal {
             opacity: 0;
             transform: translateY(25px);
@@ -1083,6 +1275,13 @@
     </style>
 </head>
 <body>
+
+    <!-- STICKY INSTAGRAM HANDLE BAR -->
+    <div class="sticky-insta-bar">
+        <a href="https://instagram.com/creator_abhayraj" target="_blank">
+            📷 Instagram: @creator_abhayraj
+        </a>
+    </div>
 
     <!-- BACKGROUND ENGINE -->
     <canvas id="particle-canvas"></canvas>
@@ -1097,7 +1296,7 @@
                     <polyline points="2 17 12 22 22 17"></polyline>
                     <polyline points="2 12 12 17 22 12"></polyline>
                 </svg>
-                CREATOR <span class="highlight">ABHAY RAJ</span>
+                CREATOR <span class="highlight">ABHAYRAJ</span>
             </a>
             
             <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Toggle Navigation">☰</button>
@@ -1105,29 +1304,29 @@
             <ul class="nav-links" id="nav-links">
                 <li><a href="#home">Home</a></li>
                 <li><a href="#calculator">Pricing</a></li>
-                <li><a href="#about">About</a></li>
                 <li><a href="#services">Services</a></li>
+                <li><a href="#premium">Premium</a></li>
+                <li><a href="#ai-assistant">AI Assistant</a></li>
                 <li><a href="#feedback">Feedback</a></li>
+                <li><a href="#policy">Policy</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
         </div>
     </header>
 
     <main>
-        <!-- ==========================================
-             HOME SECTION 
-             ========================================== -->
+        <!-- HOME SECTION -->
         <section id="home">
             <div class="container">
                 <div class="hero-content reveal active">
                     <div class="trust-badge-top">
-                        <span>★ Professional Web Engineering & Development</span>
+                        <span>★ Professional Web Engineering & Digital Dominance</span>
                     </div>
-                    <h1 class="hero-title">Welcome to Creator<br><span class="highlight">Abhay Raj</span></h1>
+                    <h1 class="hero-title">Welcome to Creator<br><span class="highlight">Abhayraj</span></h1>
                     <p class="hero-subtitle">Building High-Tech <span class="typing-text" id="typing-text">Websites</span></p>
                     <div class="hero-cta-group">
                         <a href="#calculator" class="btn">Instant Website Calculator</a>
-                        <a href="#services" class="btn btn-outline">Explore Services</a>
+                        <a href="#premium" class="btn btn-outline">Explore Premium Club</a>
                     </div>
                 </div>
             </div>
@@ -1138,26 +1337,22 @@
             <p>Ready to build your digital presence? Call directly: <span class="big-number">9306882926</span></p>
         </div>
 
-        <!-- ==========================================
-             INSTANT WEBSITE PRICING CALCULATOR & CHECKOUT
-             ========================================== -->
+        <!-- INSTANT WEBSITE PRICING CALCULATOR -->
         <section id="calculator" class="section-padding">
             <div class="container">
                 <h2 class="section-title reveal">Instant Website Calculator</h2>
                 
                 <div class="calculator-wrapper glass-panel reveal">
-                    <!-- Website Type Selector -->
                     <div class="calc-group">
                         <div class="calc-label">Select Website Type:</div>
                         <div class="calc-select-grid">
-                            <div class="calc-option-card selected" data-type="portfolio" data-base="2500">Portfolio Website</div>
-                            <div class="calc-option-card" data-type="business" data-base="4000">Business Website</div>
-                            <div class="calc-option-card" data-type="ecommerce" data-base="6000">E-Commerce Store</div>
-                            <div class="calc-option-card" data-type="webapp" data-base="8500">Custom Web App</div>
+                            <div class="calc-option-card selected" data-type="portfolio" data-base="2500">Portfolio (₹2,500)</div>
+                            <div class="calc-option-card" data-type="business" data-base="4000">Business (₹4,000)</div>
+                            <div class="calc-option-card" data-type="ecommerce" data-base="6000">E-Commerce (₹6,000)</div>
+                            <div class="calc-option-card" data-type="webapp" data-base="8500">Web App (₹8,500)</div>
                         </div>
                     </div>
 
-                    <!-- Number of Pages Slider -->
                     <div class="calc-group">
                         <div class="calc-label">
                             Number of Pages: <span class="highlight-val" id="pages-val">1 Page</span>
@@ -1165,18 +1360,15 @@
                         <input type="range" min="1" max="10" value="1" class="range-slider" id="pages-slider" aria-label="Number of pages slider">
                     </div>
 
-                    <!-- Total Price Display Box -->
                     <div class="price-display-box" id="price-display-container">
                         <h3>Estimated Cost</h3>
                         <div class="total-price" id="total-price-display">₹2,500</div>
                     </div>
 
-                    <!-- Continue Button (Hidden or Disabled when slider is at end) -->
                     <button type="button" class="btn submit-btn" id="continue-checkout-btn" style="width: 100%;">Continue to Secure Payment</button>
 
-                    <!-- Dynamic Direct Contact Box (Appears when user moves slider to end) -->
                     <div class="multiple-pages-action-box" id="multiple-pages-box">
-                        <p>You have selected multiple pages (end of slider). For large scale projects, please contact Abhay Raj directly:</p>
+                        <p>You have selected multiple pages. For large-scale multi-page architecture, contact Abhayraj directly:</p>
                         <a href="tel:+919306882926" class="direct-call-action-btn">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
                             Call 9306882926 Now
@@ -1191,9 +1383,7 @@
             <p>Trusted Web Development & Design: <span class="big-number">9306882926</span></p>
         </div>
 
-        <!-- ==========================================
-             ABOUT US SECTION 
-             ========================================== -->
+        <!-- ABOUT US SECTION -->
         <section id="about" class="section-padding">
             <div class="container">
                 <h2 class="section-title reveal">About Us</h2>
@@ -1208,9 +1398,9 @@
                     </div>
                     
                     <div class="about-content reveal">
-                        <h3>Committed to <span class="highlight">Excellence</span>.</h3>
-                        <p>I am Abhay Raj, a professional web developer and digital architect dedicated to engineering secure, high-performing web solutions. Every project is crafted with precision, optimal speed, and clean code standards.</p>
-                        <p>Partnering with Creator Abhay Raj guarantees transparent communication, dependable delivery, and robust modern architectures designed to elevate your brand.</p>
+                        <h3>Engineered for <span class="highlight">Excellence</span>.</h3>
+                        <p>I am Abhayraj, creator of Creator Abhayraj, dedicated to delivering blazing-speed web applications, glassmorphism layouts, and robust Firebase integrations.</p>
+                        <p>Every website is deployed with a standard 7-day build timeline, transparent communication, and dedicated post-launch support.</p>
                     </div>
                 </div>
 
@@ -1220,8 +1410,8 @@
                         <div class="stat-label">Projects Deployed</div>
                     </div>
                     <div class="stat-box glass-panel">
-                        <div class="stat-number">100%</div>
-                        <div class="stat-label">Client Satisfaction</div>
+                        <div class="stat-number">7 Days</div>
+                        <div class="stat-label">Rapid Delivery</div>
                     </div>
                     <div class="stat-box glass-panel">
                         <div class="stat-number">24/7</div>
@@ -1236,9 +1426,7 @@
             <p>Get in touch for custom solutions: <span class="big-number">9306882926</span></p>
         </div>
 
-        <!-- ==========================================
-             SERVICES SECTION 
-             ========================================== -->
+        <!-- SERVICES SECTION -->
         <section id="services" class="section-padding">
             <div class="container">
                 <h2 class="section-title reveal">Professional Services</h2>
@@ -1248,38 +1436,38 @@
                         <div class="service-icon">
                             <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
                         </div>
-                        <h3 class="service-title">Full-Stack Development</h3>
-                        <p class="service-desc">Robust web applications built from scratch using secure, scalable technologies.</p>
+                        <h3 class="service-title">Rapid 7-Day Build</h3>
+                        <p class="service-desc">Complete, production-ready website development delivered in approx 7 days.</p>
                         <ul class="service-features">
-                            <li>Custom Web Apps</li>
-                            <li>Database Architecture</li>
-                            <li>Secure API Integration</li>
+                            <li>Lightning Fast Turnaround</li>
+                            <li>Clean Architecture</li>
+                            <li>Responsive Design</li>
                         </ul>
                     </div>
 
                     <div class="service-card glass-panel reveal">
                         <div class="service-icon">
-                            <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
                         </div>
-                        <h3 class="service-title">UI/UX & Design</h3>
-                        <p class="service-desc">Immersive, professional interfaces designed to maximize user engagement and trust.</p>
+                        <h3 class="service-title">Custom Domain Setup</h3>
+                        <p class="service-desc">Professional domain integration available upon advance payment of ₹1,000 or above.</p>
                         <ul class="service-features">
-                            <li>Figma Prototyping</li>
-                            <li>Responsive Layouts</li>
-                            <li>Interactive Animations</li>
+                            <li>Branded Web Address</li>
+                            <li>Free SSL Encryption</li>
+                            <li>DNS Configuration</li>
                         </ul>
                     </div>
 
                     <div class="service-card glass-panel reveal">
                         <div class="service-icon">
-                            <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
                         </div>
-                        <h3 class="service-title">E-Commerce Platforms</h3>
-                        <p class="service-desc">Secure online stores equipped with streamlined checkout flows and payment gateways.</p>
+                        <h3 class="service-title">2-Week Post-Launch Support</h3>
+                        <p class="service-desc">Comprehensive edits and adjustments tailored to customer requests for up to 2 weeks post-launch.</p>
                         <ul class="service-features">
-                            <li>Shopify / WooCommerce</li>
-                            <li>Custom Storefronts</li>
-                            <li>Encrypted Checkout</li>
+                            <li>Free Content Tweaks</li>
+                            <li>Layout Adjustments</li>
+                            <li>Direct Developer Access</li>
                         </ul>
                     </div>
 
@@ -1287,57 +1475,101 @@
                         <div class="service-icon">
                             <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
                         </div>
-                        <h3 class="service-title">SEO & Performance</h3>
-                        <p class="service-desc">Speed optimization and search engine rankings to ensure maximum visibility.</p>
+                        <h3 class="service-title">Firebase & Security</h3>
+                        <p class="service-desc">Integrated authentication, databases, and secure encrypted backend control.</p>
                         <ul class="service-features">
-                            <li>Speed Tuning</li>
-                            <li>On-Page SEO</li>
-                            <li>Analytics Setup</li>
+                            <li>Secure Authentication</li>
+                            <li>Admin Dashboard</li>
+                            <li>Real-time Data Sync</li>
                         </ul>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- ==========================================
-             FEEDBACK SECTION (Max 150 words limit)
-             ========================================== -->
-        <section id="feedback" class="section-padding">
-    <div class="container">
-        <h2 class="section-title reveal">Client Feedback</h2>
-        <div class="feedback-wrapper glass-panel reveal">
-            <p style="color: var(--text-muted); margin-bottom: 1.2rem; font-size: 1rem;">Share your feedback or experience working with Creator Abhay Raj (Max 150 words):</p>
-            <form id="feedbackForm">
-                <div class="form-group">
-                    <textarea id="feedbackText" class="form-control" placeholder="Write your feedback here..." required></textarea>
-                    <div class="word-counter" id="word-counter-display">Words: 0 / 150</div>
+        <!-- PREMIUM MEMBERSHIP PAGE SECTION -->
+        <section id="premium" class="section-padding">
+            <div class="container">
+                <h2 class="section-title reveal">Buy Premium Membership</h2>
+                <p class="section-subtitle" style="text-align: center; color: var(--text-muted); margin-bottom: 2rem;">Unlock VIP privileges and eliminate advance payment barriers.</p>
+                
+                <div class="glass-panel premium-card reveal">
+                    <h3 style="font-family: var(--font-display); color: var(--accent-primary); font-size: 1.6rem;">Creator Elite Club</h3>
+                    <div class="premium-price">₹2,500 <span>/ year</span></div>
+                    <ul class="premium-features">
+                        <li>Custom domain name included without advance payment</li>
+                        <li>Rapid express service & priority build queue</li>
+                        <li>Unlimited 2-week post-launch edits extended year-round</li>
+                        <li>Direct priority access to AI assistant & developer updates</li>
+                    </ul>
+                    <a href="https://instagram.com/creator_abhayraj" target="_blank" class="btn" style="width: 100%; margin-top: 1rem;">Join Premium via Instagram</a>
                 </div>
-                <button type="submit" class="btn" style="width: 100%; margin-top: 0.5rem;">Send Feedback via WhatsApp</button>
-            </form>
-        </div>
-    </div>
-</section>
+            </div>
+        </section>
+
+        <!-- AI ASSISTANT SECTION -->
+        <section id="ai-assistant" class="section-padding">
+            <div class="container">
+                <h2 class="section-title reveal">AI Assistant</h2>
+                <p style="text-align: center; color: var(--text-muted); margin-bottom: 2rem;">Ask me anything about pricing, 7-day build time, custom domains, or cancellation policies!</p>
+                
+                <div class="ai-assistant-wrapper glass-panel reveal">
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="message bot">Hello! I am your AI assistant for Creator Abhayraj. How can I help you build your digital empire today?</div>
+                    </div>
+                    <div class="chat-input-area">
+                        <input type="text" id="userInput" placeholder="Ask a question (e.g., build time, custom domain, pricing)..." onkeypress="handleKeyPress(event)">
+                        <button class="btn" onclick="sendMessage()">Send</button>
+                    </div>
+                </div>
+             </div>
+        </section>
+
+        <!-- FEEDBACK SECTION -->
+        <section id="feedback" class="section-padding">
+            <div class="container">
+                <h2 class="section-title reveal">Client Feedback</h2>
+                <div class="feedback-wrapper glass-panel reveal">
+                    <p style="color: var(--text-muted); margin-bottom: 1.2rem; font-size: 1rem;">Share your feedback or experience working with Creator Abhayraj (Max 150 words):</p>
+                    <form id="feedbackForm">
+                        <div class="form-group">
+                            <textarea id="feedbackText" class="form-control" placeholder="Write your feedback here..." required></textarea>
+                            <div class="word-counter" id="word-counter-display">Words: 0 / 150</div>
+                        </div>
+                        <button type="submit" class="btn" style="width: 100%; margin-top: 0.5rem;">Send Feedback via WhatsApp</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- CANCELLATION POLICY SECTION -->
+        <section id="policy" class="section-padding" style="padding-top: 0;">
+            <div class="container">
+                <div class="policy-box glass-panel reveal">
+                    <h3>Cancellation & Refund Policy</h3>
+                    <p>You have full freedom to cancel your project request anytime <strong>before</strong> official work commences. Once your request is submitted and active build work has started, cancellation is locked until project completion.</p>
+                    <p>If you request a refund after completion under valid terms, your money will be refunded, but please note that you will need to re-submit or assign the website project back to Creator Abhayraj.</p>
+                </div>
+            </div>
+        </section>
 
         <!-- PERSISTENT CONTACT STRIP -->
         <div class="contact-strip">
             <p>Let's discuss your project: <span class="big-number">9306882926</span></p>
         </div>
 
-        <!-- ==========================================
-             CONTACT SECTION 
-             ========================================== -->
+        <!-- CONTACT SECTION -->
         <section id="contact" class="section-padding">
             <div class="container">
                 <h2 class="section-title reveal">Get in Touch</h2>
                 
                 <div class="contact-wrapper">
-                    <!-- Contact Information -->
                     <div class="contact-info-panel glass-panel reveal">
                         <h3>Contact Information</h3>
                         <p>Ready to start your digital transformation? Reach out directly via phone or email. All inquiries are handled with professional priority.</p>
                         
                         <div class="contact-method">
-                        <div class="contact-icon">
+                            <div class="contact-icon">
                                 <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
                             </div>
                             <div class="contact-details">
@@ -1355,12 +1587,21 @@
                                 <a href="mailto:reenarjput03@gmail.com">reenarjput03@gmail.com</a>
                             </div>
                         </div>
+
+                        <div class="contact-method">
+                            <div class="contact-icon">
+                                <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                            </div>
+                            <div class="contact-details">
+                                <h4>Instagram Handle</h4>
+                                <a href="https://instagram.com/creator_abhayraj" target="_blank">@creator_abhayraj</a>
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- Order Form -->
                     <div class="order-form-panel glass-panel reveal">
                         <h3>Project Inquiry</h3>
-                        <form id="orderForm" onsubmit="event.preventDefault(); alert('Inquiry Received! Abhay Raj will contact you shortly at 9306882926.');">
+                        <form id="orderForm" onsubmit="event.preventDefault(); alert('Inquiry Received! Abhayraj will contact you shortly at 9306882926.');">
                             <div class="form-row">
                                 <div class="form-group">
                                     <input type="text" class="form-control" placeholder="Your Name" required>
@@ -1392,16 +1633,20 @@
         </section>
     </main>
 
+    <!-- STICKY INTERACTIVE MASCOT -->
+    <div id="sticky-mascot">
+        <div class="mascot-speech-bubble" id="mascotSpeech">⚡ Welcome to Creator Abhayraj! Let's build your site!</div>
+        <div class="mascot-avatar" onclick="triggerMascotQuote()" title="Click me for tips!">🤖</div>
+    </div>
+
     <!-- FOOTER -->
     <footer>
         <div class="container">
             <div class="social-links">
-                <a href="#" class="social-link" aria-label="Facebook"><svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></a>
-                <a href="#" class="social-link" aria-label="Twitter"><svg viewBox="0 0 24 24"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg></a>
-                <a href="#" class="social-link" aria-label="Instagram"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
-                <a href="#" class="social-link" aria-label="Github"><svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a>
+                <a href="https://instagram.com/creator_abhayraj" target="_blank" class="social-link" aria-label="Instagram"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://github.com" target="_blank" class="social-link" aria-label="Github"><svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a>
             </div>
-           <p class="copyright">&copy; 2026 <span>Creator Abhay Raj</span>. All Rights Reserved. Professional Web Solutions.</p>
+            <p class="copyright">&copy; 2026 <span>Creator Abhayraj</span>. All Rights Reserved. Instagram: <a href="https://instagram.com/creator_abhayraj" target="_blank" style="color: var(--accent-primary); text-decoration: none;">@creator_abhayraj</a></p>
         </div>
     </footer>
 
@@ -1425,21 +1670,15 @@
             </div>
         </div>
     </div>
-
-    <!-- ==========================================================================
-         JAVASCRIPT ENGINE
-         ========================================================================== -->
+    <!-- JAVASCRIPT ENGINE -->
     <script>
-        // --- 1. BACKGROUND ENGINE ---
+        // BACKGROUND ENGINE
         const canvas = document.getElementById('particle-canvas');
         const ctx = canvas.getContext('2d');
         
         let width, height;
         let particles = [];
-
-        const highTechColors = [
-            '#00f3ff', '#7928ca', '#00bcd4', '#3f51b5', '#2196f3', '#009688', '#4caf50'
-        ];
+        const highTechColors = ['#00f3ff', '#7928ca', '#00bcd4', '#3f51b5', '#2196f3', '#009688', '#4caf50'];
 
         function resizeCanvas() {
             width = canvas.width = window.innerWidth;
@@ -1459,14 +1698,12 @@
                 this.color = highTechColors[Math.floor(Math.random() * highTechColors.length)];
                 this.alpha = Math.random() * 0.4 + 0.2;
             }
-
             update() {
                 this.x += this.vx;
                 this.y += this.vy;
                 if (this.x < 0 || this.x > width) this.vx *= -1;
                 if (this.y < 0 || this.y > height) this.vy *= -1;
             }
-
             draw() {
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
@@ -1481,9 +1718,7 @@
         }
 
         const particleCount = window.innerWidth < 768 ? 40 : 90;
-        for (let i = 0; i < particleCount; i++) {
-            particles.push(new Particle());
-        }
+        for (let i = 0; i < particleCount; i++) { particles.push(new Particle()); }
 
         function animateCanvas() {
             ctx.clearRect(0, 0, width, height);
@@ -1510,14 +1745,11 @@
         }
         animateCanvas();
 
-        // --- 2. NAVBAR SCROLL EFFECT & MOBILE TOGGLE ---
+        // NAVBAR SCROLL & MOBILE TOGGLE
         const header = document.getElementById('header');
         window.addEventListener('scroll', () => {
-            if (window.scrollY > 40) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
-            }
+            if (window.scrollY > 40) { header.classList.add('scrolled'); } 
+            else { header.classList.remove('scrolled'); }
         });
 
         const mobileBtn = document.getElementById('mobile-menu-btn');
@@ -1534,12 +1766,10 @@
             });
         });
 
-        // --- 3. TYPING EFFECT ---
+        // TYPING EFFECT
         const typingElement = document.getElementById('typing-text');
         const words = ['Websites', 'Web Apps', 'E-Commerce Stores', 'UI/UX Designs', 'Digital Solutions'];
-        let wordIndex = 0;
-        let charIndex = 0;
-        let isDeleting = false;
+        let wordIndex = 0, charIndex = 0, isDeleting = false;
         
         function typeEffect() {
             const currentWord = words[wordIndex];
@@ -1563,7 +1793,7 @@
         }
         setTimeout(typeEffect, 1000);
 
-        // --- 4. PRICING CALCULATOR & MULTIPLE PAGES FEATURE ---
+        // PRICING CALCULATOR
         let selectedBasePrice = 2500;
         const optionCards = document.querySelectorAll('.calc-option-card');
         const pagesSlider = document.getElementById('pages-slider');
@@ -1608,7 +1838,7 @@
             totalPriceDisplay.innerText = "₹" + finalPrice.toLocaleString('en-IN');
         }
 
-        // --- 5. QR CODE & PAYMENT MODAL ---
+        // QR CODE & PAYMENT MODAL
         const qrModalOverlay = document.getElementById('qr-modal-overlay');
         const modalCloseBtn = document.getElementById('modal-close-btn');
         const modalPriceText = document.getElementById('modal-price-text');
@@ -1616,32 +1846,27 @@
         const upiQrImg = document.getElementById('upi-qr-img');
         const gpayLink = document.getElementById('gpay-link');
         const paytmLink = document.getElementById('paytm-link');
-
         let countdownInterval;
 
         continueBtn.addEventListener('click', () => {
             const pages = parseInt(pagesSlider.value);
             if (pages === 10) return;
-
             const currentPrice = getCurrentPrice();
             modalPriceText.innerText = "₹" + currentPrice.toLocaleString('en-IN');
             
             const upiId = "9306882926@ptyes";
-            const upiUri = `upi://pay?pa=${upiId}&pn=CreatorAbhay Raj&am=${currentPrice}&cu=INR`;
+            const upiUri = `upi://pay?pa=${upiId}&pn=CreatorAbhayraj&am=${currentPrice}&cu=INR`;
             
             upiQrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(upiUri)}`;
-            
-            gpayLink.href = `tez://upi/pay?pa=${upiId}&pn=CreatorAbhay Raj&am=${currentPrice}&cu=INR`;
-            paytmLink.href = `paytmmp://pay?pa=${upiId}&pn=CreatorAbhay Raj&am=${currentPrice}&cu=INR`;
+            gpayLink.href = `tez://upi/pay?pa=${upiId}&pn=CreatorAbhayraj&am=${currentPrice}&cu=INR`;
+            paytmLink.href = `paytmmp://pay?pa=${upiId}&pn=CreatorAbhayraj&am=${currentPrice}&cu=INR`;
 
             qrModalOverlay.classList.add('active');
             startTimer(60);
         });
 
         modalCloseBtn.addEventListener('click', closeModal);
-        qrModalOverlay.addEventListener('click', (e) => {
-            if (e.target === qrModalOverlay) closeModal();
-        });
+        qrModalOverlay.addEventListener('click', (e) => { if (e.target === qrModalOverlay) closeModal(); });
 
         function closeModal() {
             qrModalOverlay.classList.remove('active');
@@ -1663,100 +1888,140 @@
                 }
             }, 1000);
         }
-
+        
         function handlePaymentCompletion() {
             const userName = prompt("Payment completed! Please enter your Name for confirmation:", "Valued Client");
             if (userName !== null) {
-                const preWrittenMsg = encodeURIComponent(`Hi Abhay Raj, I have completed the payment of ₹${getCurrentPrice()}. My name is ${userName}. Please start building my website.`);
-                const whatsappUrl = `https://wa.me/919306882926?text=${preWrittenMsg}`;
-                window.location.href = whatsappUrl;
+                const preWrittenMsg = encodeURIComponent(`Hi Abhayraj, I have completed the payment of ₹${getCurrentPrice()}. My name is ${userName}. Please start building my website.`);
+                window.location.href = `https://wa.me/919306882926?text=${preWrittenMsg}`;
             }
         }
 
-        gpayLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            window.location.href = gpayLink.href;
-            setTimeout(handlePaymentCompletion, 1500);
+        gpayLink.addEventListener('click', (e) => { e.preventDefault(); window.location.href = gpayLink.href; setTimeout(handlePaymentCompletion, 1500); });
+        paytmLink.addEventListener('click', (e) => { e.preventDefault(); window.location.href = paytmLink.href; setTimeout(handlePaymentCompletion, 1500); });
+
+        // FEEDBACK WORD LIMIT & WHATSAPP
+        const feedbackForm = document.getElementById('feedbackForm');
+        const feedbackText = document.getElementById('feedbackText');
+        const wordCounterDisplay = document.getElementById('word-counter-display');
+        const maxWords = 150;
+
+        feedbackText.addEventListener('input', () => {
+            const text = feedbackText.value.trim();
+            const wordsArr = text === '' ? [] : text.split(/\s+/);
+            const wordCount = wordsArr.length;
+
+            if (wordCount > maxWords) {
+                feedbackText.value = wordsArr.slice(0, maxWords).join(' ');
+                wordCounterDisplay.innerText = `Words: ${maxWords} / ${maxWords} (Limit reached)`;
+                wordCounterDisplay.style.color = "#ff0040";
+            } else {
+                wordCounterDisplay.innerText = `Words: ${wordCount} / ${maxWords}`;
+                wordCounterDisplay.style.color = "var(--text-muted)";
+            }
         });
 
-        paytmLink.addEventListener('click', (e) => {
+        feedbackForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            window.location.href = paytmLink.href;
-            setTimeout(handlePaymentCompletion, 1500);
+            const feedbackContent = feedbackText.value.trim();
+            if (feedbackContent === '') { alert('Please enter your feedback.'); return; }
+            const whatsappUrl = `https://wa.me/919306882926?text=${encodeURIComponent(`Hi Abhayraj, here is my feedback:\n\n"${feedbackContent}"`)}`;
+            window.location.href = whatsappUrl;
         });
 
-        // — 6. FEEDBACK WORD LIMIT & WHATSAPP REDIRECT —
-const feedbackForm = document.getElementById('feedbackForm');
-const feedbackText = document.getElementById('feedbackText');
-const wordCounterDisplay = document.getElementById('word-counter-display');
-const maxWords = 150;
+        // ENHANCED RELIABLE AI ASSISTANT BOT LOGIC
+        const knowledgeBase = [
+            { keywords: ['time', 'days', 'long', 'build', 'rapid'], response: 'Our standard website building time is approx 7 days from project confirmation!' },
+            { keywords: ['domain', 'custom', 'advance', 'rs 1000', '1000'], response: 'Custom domain names are available upon an advance payment of Rs 1,000 or above. Premium members get custom domains without advance payment!' },
+            { keywords: ['cancel', 'refund', 'money', 'policy'], response: 'You can cancel anytime before work starts. Once submitted and active work begins, cancellation is locked until completion. Refunds require re-assigning the project back to Creator Abhayraj.' },
+            { keywords: ['premium', '2500', 'year', 'club', 'membership'], response: 'Our Premium Membership is Rs 2,500/year, featuring free custom domains without advance payment, rapid priority service, and full support!' },
+            { keywords: ['instagram', 'contact', 'connect', 'abhayraj', 'handle'], response: 'You can connect directly via Instagram at @creator_abhayraj pinned at the top of the page, or call 9306882926!' },
+            { keywords: ['pricing', 'cost', 'price', 'calculator'], response: 'Our pricing starts at Rs 2,500 for portfolios. You can use our interactive Instant Calculator above to configure your exact project cost!' },
+            { keywords: ['support', 'edit', 'weeks'], response: 'We offer comprehensive website edits and adjustments tailored to customer requests for up to 2 weeks post-launch.' }
+        ];
 
-// Enforce 150-word limit while typing
-feedbackText.addEventListener('input', () => {
-    const text = feedbackText.value.trim();
-    const words = text === '' ? [] : text.split(/\s+/);
-    const wordCount = words.length;
+        function sendMessage() {
+            const input = document.getElementById('userInput');
+            const text = input.value.trim();
+            if (!text) return;
 
-    if (wordCount > maxWords) {
-        feedbackText.value = words.slice(0, maxWords).join(' ');
-        wordCounterDisplay.innerText = `Words: ${maxWords} / ${maxWords} (Limit reached)`;
-        wordCounterDisplay.style.color = "#ff0040";
-    } else {
-        wordCounterDisplay.innerText = `Words: ${wordCount} / ${maxWords}`;
-        wordCounterDisplay.style.color = "var(--text-muted)";
-    }
-});
+            appendMessage(text, 'user');
+            input.value = '';
 
-// Redirect to WhatsApp with pre-written feedback on submit
-feedbackForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const feedbackContent = feedbackText.value.trim();
-    
-    if (feedbackContent === '') {
-        alert('Please enter your feedback before submitting.');
-        return;
-    }
+            setTimeout(() => {
+                let botReply = "That's a great question! For specific custom requirements, feel free to DM us on Instagram @creator_abhayraj or call 9306882926.";
+                const lowerText = text.toLowerCase();
 
-    const whatsappMessage = `Hi Abhay Raj, here is my feedback:\n\n"${feedbackContent}"`;
-    const encodedMessage = encodeURIComponent(whatsappMessage);
-    const whatsappUrl = `https://wa.me/919306882926?text=${encodedMessage}`;
-    
-    window.location.href = whatsappUrl;
-});
+                for (let item of knowledgeBase) {
+                    if (item.keywords.some(kw => lowerText.includes(kw))) {
+                        botReply = item.response;
+                        break;
+                    }
+                }
 
+                appendMessage(botReply, 'bot');
+            }, 600);
+        }
 
-        // --- 7. SCROLL REVEAL OBSERVER ---
+        function handleKeyPress(e) { if (e.key === 'Enter') { sendMessage(); } }
+
+        function appendMessage(text, sender) {
+            const container = document.getElementById('chatMessages');
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `message ${sender}`;
+            msgDiv.innerText = text;
+            container.appendChild(msgDiv);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        // MASCOT RANDOM QUOTES & ANIMATION
+        const mascotQuotes = [
+            "⚡ Blazing speed & glassmorphism design!",
+            "👑 Join Creator Elite Club for Rs 2,500/yr!",
+            "🚀 7-day build time with total excellence!",
+            "💬 Ask our AI Assistant anything you need!",
+            "📷 Follow & DM @creator_abhayraj on Instagram!"
+        ];
+
+        function triggerMascotQuote() {
+            const bubble = document.getElementById('mascotSpeech');
+            const randomIndex = Math.floor(Math.random() * mascotQuotes.length);
+            bubble.innerText = mascotQuotes[randomIndex];
+            bubble.style.transform = 'scale(1.1)';
+            setTimeout(() => { bubble.style.transform = 'scale(1)'; }, 300);
+        }
+
+        setInterval(() => {
+            const bubble = document.getElementById('mascotSpeech');
+            const randomIndex = Math.floor(Math.random() * mascotQuotes.length);
+            bubble.innerText = mascotQuotes[randomIndex];
+        }, 7000);
+
+        // SCROLL REVEAL OBSERVER
         const revealElements = document.querySelectorAll('.reveal');
         const revealObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                }
-            });
+            entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('active'); } });
         }, { threshold: 0.1 });
-
         revealElements.forEach(el => revealObserver.observe(el));
     </script>
+
     <!-- Firebase SDK Integration -->
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-analytics.js";
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-analytics.js";
 
-    // Firebase configuration using your provided API keys
-    const firebaseConfig = {
-        apiKey: "AIzaSyCW_kQKCf9iQRjyB2O0Vv7jNbmoURsIgc0",
-        authDomain: "creator-abhay.firebaseapp.com",
-        projectId: "creator-abhay",
-        storageBucket: "creator-abhay.firebasestorage.app",
-        messagingSenderId: "199280063435",
-        appId: "1:199280063435:web:c7a416da55a0e9ae98fc4e",
-        measurementId: "G-KQH2BKLS13"
-    };
+        const firebaseConfig = {
+            apiKey: "AIzaSyCW_kQKCf9iQRjyB2O0Vv7jNbmoURsIgc0",
+            authDomain: "creator-abhay.firebaseapp.com",
+            projectId: "creator-abhay",
+            storageBucket: "creator-abhay.firebasestorage.app",
+            messagingSenderId: "199280063435",
+            appId: "1:199280063435:web:c7a416da55a0e9ae98fc4e",
+            measurementId: "G-KQH2BKLS13"
+        };
 
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
-</script>
-
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+    </script>
 </body>
 </html>
