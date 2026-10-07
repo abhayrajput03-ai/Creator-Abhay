@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Creator Abhayraj | Elite Web Engineering, AI Assistant & Premium Services</title>
-    <meta name="description" content="Creator Abhayraj - Professional Web Development Services, AI Assistant, Premium Club, Instant Calculator, and Secure Hosting.">
+    <title>Creator Abhayraj | Elite Web Engineering, AI Assistant & Google Authentication</title>
+    <meta name="description" content="Creator Abhayraj - Professional Web Development Services, Google Auth Login, Floating AI Assistant, WhatsApp Widget, and Premium Club.">
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,7 +19,7 @@
             --accent-primary: #00f3ff;
             --accent-secondary: #7928ca;
             --accent-purple: #9d4edd;
-            --glass-bg: rgba(18, 18, 28, 0.65);
+            --glass-bg: rgba(18, 18, 28, 0.75);
             --glass-border: rgba(255, 255, 255, 0.08);
             --font-display: 'Orbitron', sans-serif;
             --font-body: 'Rajdhani', sans-serif;
@@ -54,12 +54,8 @@
 
         #particle-canvas {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: -1;
-            pointer-events: none;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -1; pointer-events: none;
             background: radial-gradient(circle at center, #0d0d15 0%, #030305 100%);
         }
 
@@ -67,24 +63,21 @@
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             background: url('data:image/svg+xml;utf8,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)" opacity="0.04"%3E%3C/rect%3E%3C/svg%3E');
-            z-index: 0;
-            pointer-events: none;
+            z-index: 0; pointer-events: none;
         }
 
         /* STICKY INSTAGRAM BAR */
         .sticky-insta-bar {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
+            top: 0; left: 0; width: 100%;
             background: rgba(3, 3, 5, 0.92);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid var(--glass-border);
             z-index: 1005;
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
-            padding: 6px 15px;
+            padding: 6px 20px;
             font-family: var(--font-display);
             font-size: 0.82rem;
             letter-spacing: 1px;
@@ -104,6 +97,31 @@
             text-shadow: 0 0 10px var(--accent-primary);
         }
 
+        .user-auth-status {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: var(--font-code);
+            font-size: 0.85rem;
+        }
+
+        .auth-btn-small {
+            background: rgba(0, 243, 255, 0.1);
+            border: 1px solid var(--accent-primary);
+            color: var(--accent-primary);
+            padding: 2px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: var(--font-code);
+            font-size: 0.75rem;
+            transition: var(--transition-smooth);
+        }
+
+        .auth-btn-small:hover {
+            background: var(--accent-primary);
+            color: #030305;
+        }
+
         .container {
             width: 100%;
             max-width: 1300px;
@@ -113,9 +131,7 @@
             z-index: 1;
         }
 
-        .section-padding {
-            padding: 100px 0;
-        }
+        .section-padding { padding: 100px 0; }
 
         .section-title {
             font-family: var(--font-display);
@@ -132,11 +148,9 @@
         .section-title::after {
             content: '';
             position: absolute;
-            bottom: -12px;
-            left: 50%;
+            bottom: -12px; left: 50%;
             transform: translateX(-50%);
-            width: 60px;
-            height: 3px;
+            width: 60px; height: 3px;
             background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
             box-shadow: 0 0 12px var(--accent-primary);
             border-radius: 2px;
@@ -198,6 +212,32 @@
             transform: translateY(-2px);
         }
 
+        .google-auth-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: #fff;
+            color: #333;
+            font-family: var(--font-display);
+            font-weight: 700;
+            padding: 0.8rem 1.8rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+            font-size: 0.95rem;
+            text-transform: uppercase;
+        }
+
+        .google-auth-btn:hover {
+            background: #f1f1f1;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 255, 255, 0.4);
+        }
+
+        .google-auth-btn svg { width: 20px; height: 20px; }
+
         /* NAVIGATION BAR */
         header {
             position: fixed;
@@ -235,1052 +275,445 @@
         }
 
         .logo-icon {
-            width: 30px;
-            height: 30px;
-            fill: none;
+            width: 30px; height: 30px; fill: none;
             stroke: var(--accent-primary);
-            stroke-width: 2;
-            stroke-linecap: round;
-            stroke-linejoin: round;
+            stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
             filter: drop-shadow(0 0 8px var(--accent-primary));
         }
 
         .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 1.5rem;
-            align-items: center;
+            display: flex; list-style: none;
+            gap: 1.5rem; align-items: center;
         }
 
         .nav-links li a {
-            color: var(--text-main);
-            text-decoration: none;
-            font-family: var(--font-code);
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            position: relative;
-            transition: var(--transition-smooth);
+            color: var(--text-main); text-decoration: none;
+            font-family: var(--font-code); font-size: 0.9rem;
+            text-transform: uppercase; letter-spacing: 1px;
+            position: relative; transition: var(--transition-smooth);
         }
 
         .nav-links li a::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--accent-primary);
+            content: ''; position: absolute; bottom: -5px; left: 0;
+            width: 0; height: 2px; background: var(--accent-primary);
             transition: var(--transition-smooth);
             box-shadow: 0 0 10px var(--accent-primary);
         }
 
-        .nav-links li a:hover {
-            color: var(--accent-primary);
-        }
-
-        .nav-links li a:hover::after {
-            width: 100%;
-        }
+        .nav-links li a:hover { color: var(--accent-primary); }
+        .nav-links li a:hover::after { width: 100%; }
 
         .mobile-menu-btn {
-            display: none;
-            background: transparent;
-            border: none;
-            color: var(--accent-primary);
-            font-size: 2rem;
-            cursor: pointer;
-            z-index: 1001;
+            display: none; background: transparent; border: none;
+            color: var(--accent-primary); font-size: 2rem; cursor: pointer; z-index: 1001;
         }
 
         /* HERO SECTION */
         #home {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-            padding: calc(var(--nav-height) + 4rem) 0 4rem;
+            min-height: 100vh; display: flex; align-items: center; justify-content: center;
+            position: relative; overflow: hidden; padding: calc(var(--nav-height) + 4rem) 0 4rem;
         }
 
-        .hero-content {
-            text-align: center;
-            max-width: 900px;
-            z-index: 2;
-            width: 100%;
-        }
+        .hero-content { text-align: center; max-width: 900px; z-index: 2; width: 100%; }
 
         .trust-badge-top {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(0, 243, 255, 0.08);
-            border: 1px solid rgba(0, 243, 255, 0.25);
-            padding: 6px 16px;
-            border-radius: 30px;
-            font-family: var(--font-code);
-            font-size: 0.85rem;
-            color: var(--accent-primary);
-            margin-bottom: 1.5rem;
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(0, 243, 255, 0.08); border: 1px solid rgba(0, 243, 255, 0.25);
+            padding: 6px 16px; border-radius: 30px; font-family: var(--font-code);
+            font-size: 0.85rem; color: var(--accent-primary); margin-bottom: 1.5rem;
             box-shadow: 0 0 15px rgba(0, 243, 255, 0.1);
         }
 
         .hero-title {
             font-family: var(--font-display);
             font-size: clamp(2.3rem, 5.5vw, 4.2rem);
-            font-weight: 900;
-            line-height: 1.1;
-            margin-bottom: 1.2rem;
+            font-weight: 900; line-height: 1.1; margin-bottom: 1.2rem;
             background: linear-gradient(to right, #fff, var(--text-muted));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             text-transform: uppercase;
         }
 
         .hero-subtitle {
             font-size: clamp(1.1rem, 2.2vw, 1.35rem);
-            color: var(--text-muted);
-            margin-bottom: 2.2rem;
-            font-family: var(--font-code);
+            color: var(--text-muted); margin-bottom: 2.2rem; font-family: var(--font-code);
         }
 
         .typing-text::after {
-            content: '|';
-            animation: blink 1s infinite;
-            color: var(--accent-secondary);
+            content: '|'; animation: blink 1s infinite; color: var(--accent-secondary);
         }
 
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
-        }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
         .hero-cta-group {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
+            display: flex; gap: 1rem; justify-content: center; align-items: center; flex-wrap: wrap;
         }
 
         /* PRICING CALCULATOR */
-        .calculator-wrapper {
-            max-width: 750px;
-            margin: 0 auto;
-            padding: clamp(1.5rem, 4vw, 3rem);
-        }
-
-        .calc-group {
-            margin-bottom: 2rem;
-        }
+        .calculator-wrapper { max-width: 750px; margin: 0 auto; padding: clamp(1.5rem, 4vw, 3rem); }
+        .calc-group { margin-bottom: 2rem; }
 
         .calc-label {
-            font-family: var(--font-display);
-            font-size: clamp(1rem, 2vw, 1.15rem);
-            color: #fff;
-            margin-bottom: 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
+            font-family: var(--font-display); font-size: clamp(1rem, 2vw, 1.15rem);
+            color: #fff; margin-bottom: 1rem; display: flex; justify-content: space-between;
+            align-items: center; flex-wrap: wrap; gap: 10px;
         }
 
-        .calc-label span.highlight-val {
-            color: var(--accent-primary);
-            font-size: 1.25rem;
-        }
-
-        .calc-select-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 1rem;
-        }
+        .calc-label span.highlight-val { color: var(--accent-primary); font-size: 1.25rem; }
+        .calc-select-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem; }
 
         .calc-option-card {
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            padding: 1rem;
-            text-align: center;
-            cursor: pointer;
-            transition: var(--transition-smooth);
-            font-family: var(--font-body);
-            font-size: 1rem;
-            color: var(--text-muted);
+            background: rgba(0, 0, 0, 0.4); border: 1px solid var(--glass-border);
+            border-radius: 12px; padding: 1rem; text-align: center; cursor: pointer;
+            transition: var(--transition-smooth); font-family: var(--font-body); font-size: 1rem; color: var(--text-muted);
         }
 
-        .calc-option-card:hover {
-            border-color: var(--accent-primary);
-            color: #fff;
-        }
-
+        .calc-option-card:hover { border-color: var(--accent-primary); color: #fff; }
         .calc-option-card.selected {
-            background: rgba(0, 243, 255, 0.12);
-            border-color: var(--accent-primary);
-            color: #fff;
-            box-shadow: 0 0 15px rgba(0, 243, 255, 0.25);
+            background: rgba(0, 243, 255, 0.12); border-color: var(--accent-primary);
+            color: #fff; box-shadow: 0 0 15px rgba(0, 243, 255, 0.25);
         }
 
         .range-slider {
-            width: 100%;
-            height: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
-            outline: none;
-            -webkit-appearance: none;
-            margin: 1rem 0;
+            width: 100%; height: 8px; background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px; outline: none; -webkit-appearance: none; margin: 1rem 0;
         }
 
         .range-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background: var(--accent-primary);
-            cursor: pointer;
-            box-shadow: 0 0 12px var(--accent-primary);
+            -webkit-appearance: none; width: 24px; height: 24px; border-radius: 50%;
+            background: var(--accent-primary); cursor: pointer; box-shadow: 0 0 12px var(--accent-primary);
             transition: transform 0.2s;
         }
 
-        .range-slider::-webkit-slider-thumb:hover {
-            transform: scale(1.15);
-        }
+        .range-slider::-webkit-slider-thumb:hover { transform: scale(1.15); }
 
         .price-display-box {
-            background: rgba(0, 0, 0, 0.5);
-            border: 2px dashed rgba(0, 243, 255, 0.4);
-            border-radius: 15px;
-            padding: 1.5rem;
-            text-align: center;
-            margin-bottom: 2rem;
+            background: rgba(0, 0, 0, 0.5); border: 2px dashed rgba(0, 243, 255, 0.4);
+            border-radius: 15px; padding: 1.5rem; text-align: center; margin-bottom: 2rem;
         }
 
-        .price-display-box h3 {
-            font-family: var(--font-code);
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            margin-bottom: 0.4rem;
-            text-transform: uppercase;
-        }
-
-        .total-price {
-            font-family: var(--font-display);
-            font-size: clamp(2.2rem, 5vw, 3rem);
-            font-weight: 900;
-            color: var(--accent-primary);
-            text-shadow: 0 0 15px rgba(0, 243, 255, 0.5);
-        }
+        .price-display-box h3 { font-family: var(--font-code); color: var(--text-muted); font-size: 0.95rem; margin-bottom: 0.4rem; text-transform: uppercase; }
+        .total-price { font-family: var(--font-display); font-size: clamp(2.2rem, 5vw, 3rem); font-weight: 900; color: var(--accent-primary); text-shadow: 0 0 15px rgba(0, 243, 255, 0.5); }
 
         .multiple-pages-action-box {
-            display: none;
-            text-align: center;
-            background: rgba(121, 40, 202, 0.15);
-            border: 1px solid var(--accent-secondary);
-            border-radius: 14px;
-            padding: 1.5rem;
-            margin-top: 1.5rem;
-            animation: fadeIn 0.4s ease;
+            display: none; text-align: center; background: rgba(121, 40, 202, 0.15);
+            border: 1px solid var(--accent-secondary); border-radius: 14px; padding: 1.5rem; margin-top: 1.5rem; animation: fadeIn 0.4s ease;
         }
 
-        .multiple-pages-action-box p {
-            color: #fff;
-            margin-bottom: 1rem;
-            font-size: 1.05rem;
-        }
+        .multiple-pages-action-box p { color: #fff; margin-bottom: 1rem; font-size: 1.05rem; }
 
         .direct-call-action-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            background: linear-gradient(135deg, var(--accent-secondary), #b537f2);
-            color: #fff;
-            padding: 0.9rem 2rem;
-            border-radius: 8px;
-            font-family: var(--font-display);
-            font-weight: 700;
-            text-decoration: none;
-            font-size: 1rem;
-            box-shadow: 0 4px 20px rgba(121, 40, 202, 0.4);
-            transition: var(--transition-smooth);
+            display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+            background: linear-gradient(135deg, var(--accent-secondary), #b537f2); color: #fff;
+            padding: 0.9rem 2rem; border-radius: 8px; font-family: var(--font-display); font-weight: 700;
+            text-decoration: none; font-size: 1rem; box-shadow: 0 4px 20px rgba(121, 40, 202, 0.4); transition: var(--transition-smooth);
         }
 
-        .direct-call-action-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 25px rgba(121, 40, 202, 0.6);
-            color: #fff;
-        }
+        .direct-call-action-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(121, 40, 202, 0.6); color: #fff; }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         /* QR Modal Overlay */
         .modal-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(3, 3, 5, 0.88);
-            backdrop-filter: blur(15px);
-            z-index: 2000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-            padding: 1rem;
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(3, 3, 5, 0.88); backdrop-filter: blur(15px); z-index: 2000;
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none; transition: opacity 0.3s ease; padding: 1rem;
         }
 
-        .modal-overlay.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
 
         .modal-content {
-            background: #0d0d15;
-            border: 1px solid var(--accent-primary);
-            border-radius: 20px;
-            padding: clamp(1.5rem, 4vw, 2.5rem);
-            width: 100%;
-            max-width: 440px;
-            text-align: center;
-            position: relative;
-            box-shadow: 0 0 40px rgba(0, 243, 255, 0.25);
-            max-height: 90vh;
-            overflow-y: auto;
+            background: #0d0d15; border: 1px solid var(--accent-primary); border-radius: 20px;
+            padding: clamp(1.5rem, 4vw, 2.5rem); width: 100%; max-width: 440px; text-align: center;
+            position: relative; box-shadow: 0 0 40px rgba(0, 243, 255, 0.25); max-height: 90vh; overflow-y: auto;
         }
 
         .modal-close-btn {
-            position: absolute;
-            top: 12px; right: 15px;
-            background: transparent;
-            border: none;
-            color: #fff;
-            font-size: 1.8rem;
-            cursor: pointer;
-            transition: color 0.3s;
-            line-height: 1;
+            position: absolute; top: 12px; right: 15px; background: transparent; border: none;
+            color: #fff; font-size: 1.8rem; cursor: pointer; transition: color 0.3s; line-height: 1;
         }
 
-        .modal-close-btn:hover {
-            color: var(--accent-primary);
-        }
+        .modal-close-btn:hover { color: var(--accent-primary); }
 
         .timer-badge {
-            background: rgba(255, 0, 64, 0.12);
-            border: 1px solid #ff0040;
-            color: #ff0040;
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            font-family: var(--font-code);
-            font-size: 0.85rem;
-            display: inline-block;
-            margin-bottom: 1.2rem;
-            box-shadow: 0 0 10px rgba(255, 0, 64, 0.2);
+            background: rgba(255, 0, 64, 0.12); border: 1px solid #ff0040; color: #ff0040;
+            padding: 0.3rem 0.8rem; border-radius: 20px; font-family: var(--font-code); font-size: 0.85rem;
+            display: inline-block; margin-bottom: 1.2rem; box-shadow: 0 0 10px rgba(255, 0, 64, 0.2);
         }
 
-        .qr-box {
-            background: #fff;
-            padding: 12px;
-            border-radius: 12px;
-            display: inline-block;
-            margin-bottom: 1.2rem;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
-        }
+        .qr-box { background: #fff; padding: 12px; border-radius: 12px; display: inline-block; margin-bottom: 1.2rem; box-shadow: 0 0 20px rgba(255, 255, 255, 0.2); }
+        .qr-box img { width: 180px; height: 180px; display: block; max-width: 100%; }
 
-        .qr-box img {
-            width: 180px;
-            height: 180px;
-            display: block;
-            max-width: 100%;
-        }
-
-        .payment-apps-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.8rem;
-            margin-top: 1.2rem;
-        }
+        .payment-apps-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin-top: 1.2rem; }
 
         .pay-app-btn {
-            padding: 0.7rem 0.8rem;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid var(--glass-border);
-            border-radius: 8px;
-            color: #fff;
-            font-family: var(--font-display);
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: var(--transition-smooth);
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
+            padding: 0.7rem 0.8rem; background: rgba(255, 255, 255, 0.04); border: 1px solid var(--glass-border);
+            border-radius: 8px; color: #fff; font-family: var(--font-display); font-size: 0.85rem; cursor: pointer;
+            transition: var(--transition-smooth); text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 6px;
         }
 
-        .pay-app-btn:hover {
-            background: var(--accent-primary);
-            color: #030305;
-            border-color: var(--accent-primary);
-            box-shadow: 0 0 15px var(--accent-primary);
-        }
+        .pay-app-btn:hover { background: var(--accent-primary); color: #030305; border-color: var(--accent-primary); box-shadow: 0 0 15px var(--accent-primary); }
 
         /* ABOUT SECTION */
-        .about-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-            align-items: center;
-        }
-
+        .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
         .about-graphic {
-            width: 100%;
-            height: auto;
-            border-radius: 20px;
-            background: rgba(0, 243, 255, 0.02);
-            border: 1px solid var(--glass-border);
-            padding: 1.5rem;
-            box-shadow: inset 0 0 40px rgba(0, 243, 255, 0.04);
-            position: relative;
-            overflow: hidden;
+            width: 100%; height: auto; border-radius: 20px; background: rgba(0, 243, 255, 0.02);
+            border: 1px solid var(--glass-border); padding: 1.5rem; box-shadow: inset 0 0 40px rgba(0, 243, 255, 0.04);
+            position: relative; overflow: hidden;
         }
 
         .tech-hexagon {
-            width: 220px;
-            height: 220px;
-            background: var(--glass-bg);
+            width: 220px; height: 220px; background: var(--glass-bg);
             clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 2px solid var(--accent-primary);
-            box-shadow: 0 0 25px rgba(0, 243, 255, 0.3);
-            margin: 0 auto;
+            display: flex; align-items: center; justify-content: center; border: 2px solid var(--accent-primary);
+            box-shadow: 0 0 25px rgba(0, 243, 255, 0.3); margin: 0 auto;
         }
 
-        .tech-hexagon span {
-            font-family: var(--font-display);
-            font-size: 3.5rem;
-            font-weight: 900;
-            color: #fff;
-            text-shadow: 0 0 15px var(--accent-secondary);
-        }
+        .tech-hexagon span { font-family: var(--font-display); font-size: 3.5rem; font-weight: 900; color: #fff; text-shadow: 0 0 15px var(--accent-secondary); }
 
-        .about-content h3 {
-            font-size: clamp(1.6rem, 3vw, 2.2rem);
-            font-family: var(--font-display);
-            margin-bottom: 1.2rem;
-            color: var(--text-main);
-        }
+        .about-content h3 { font-size: clamp(1.6rem, 3vw, 2.2rem); font-family: var(--font-display); margin-bottom: 1.2rem; color: var(--text-main); }
+        .about-content p { font-size: 1.05rem; color: var(--text-muted); margin-bottom: 1.2rem; }
 
-        .about-content p {
-            font-size: 1.05rem;
-            color: var(--text-muted);
-            margin-bottom: 1.2rem;
-        }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1.2rem; margin-top: 2.5rem; }
+        .stat-box { padding: 1.2rem; text-align: center; transition: var(--transition-smooth); }
+        .stat-box:hover { transform: translateY(-5px); border-color: var(--accent-primary); box-shadow: 0 8px 25px rgba(0, 243, 255, 0.15); }
 
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            gap: 1.2rem;
-            margin-top: 2.5rem;
-        }
-
-        .stat-box {
-            padding: 1.2rem;
-            text-align: center;
-            transition: var(--transition-smooth);
-        }
-
-        .stat-box:hover {
-            transform: translateY(-5px);
-            border-color: var(--accent-primary);
-            box-shadow: 0 8px 25px rgba(0, 243, 255, 0.15);
-        }
-
-        .stat-number {
-            font-family: var(--font-display);
-            font-size: 2.2rem;
-            font-weight: 700;
-            color: var(--accent-primary);
-            margin-bottom: 0.3rem;
-            text-shadow: 0 0 12px rgba(0, 243, 255, 0.4);
-        }
-
-        .stat-label {
-            font-family: var(--font-code);
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
+        .stat-number { font-family: var(--font-display); font-size: 2.2rem; font-weight: 700; color: var(--accent-primary); margin-bottom: 0.3rem; text-shadow: 0 0 12px rgba(0, 243, 255, 0.4); }
+        .stat-label { font-family: var(--font-code); font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
 
         /* SERVICES SECTION */
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-
-        .service-card {
-            padding: 2.5rem 1.8rem;
-            display: flex;
-            flex-direction: column;
-            gap: 1.2rem;
-            position: relative;
-            overflow: hidden;
-            transition: var(--transition-smooth);
-        }
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin-top: 3rem; }
+        .service-card { padding: 2.5rem 1.8rem; display: flex; flex-direction: column; gap: 1.2rem; position: relative; overflow: hidden; transition: var(--transition-smooth); }
 
         .service-card:hover {
-            border-color: rgba(0, 243, 255, 0.4);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 243, 255, 0.15);
-            transform: translateY(-5px);
+            border-color: rgba(0, 243, 255, 0.4); box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 243, 255, 0.15); transform: translateY(-5px);
         }
 
         .service-icon {
-            width: 55px;
-            height: 55px;
-            z-index: 1;
-            background: rgba(0, 243, 255, 0.08);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid rgba(0, 243, 255, 0.25);
-            box-shadow: 0 0 12px rgba(0, 243, 255, 0.15);
+            width: 55px; height: 55px; z-index: 1; background: rgba(0, 243, 255, 0.08);
+            border-radius: 12px; display: flex; align-items: center; justify-content: center;
+            border: 1px solid rgba(0, 243, 255, 0.25); box-shadow: 0 0 12px rgba(0, 243, 255, 0.15);
         }
 
-        .service-icon svg {
-            width: 26px;
-            height: 26px;
-            fill: none;
-            stroke: var(--accent-primary);
-            stroke-width: 2;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
+        .service-icon svg { width: 26px; height: 26px; fill: none; stroke: var(--accent-primary); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
-        .service-title {
-            font-family: var(--font-display);
-            font-size: 1.35rem;
-            color: #fff;
-        }
-
-        .service-desc {
-            color: var(--text-muted);
-            font-size: 0.98rem;
-        }
+        .service-title { font-family: var(--font-display); font-size: 1.35rem; color: #fff; }
+        .service-desc { color: var(--text-muted); font-size: 0.98rem; }
         
-        .service-features {
-            list-style: none;
-            margin-top: 0.8rem;
-        }
-
-        .service-features li {
-            font-family: var(--font-code);
-            font-size: 0.88rem;
-            color: #ccc;
-            margin-bottom: 0.4rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .service-features li::before {
-            content: '✓';
-            color: var(--accent-primary);
-            font-weight: bold;
-        }
+        .service-features { list-style: none; margin-top: 0.8rem; }
+        .service-features li { font-family: var(--font-code); font-size: 0.88rem; color: #ccc; margin-bottom: 0.4rem; display: flex; align-items: center; gap: 8px; }
+        .service-features li::before { content: '✓'; color: var(--accent-primary); font-weight: bold; }
 
         /* PREMIUM CLUB SECTION */
         .premium-card {
-            max-width: 550px;
-            margin: 0 auto;
-            padding: 3rem 2rem;
-            border: 2px solid var(--accent-primary);
+            max-width: 550px; margin: 0 auto; padding: 3rem 2rem; border: 2px solid var(--accent-primary);
             background: linear-gradient(135deg, rgba(0, 243, 255, 0.04), rgba(121, 40, 202, 0.04));
-            position: relative;
-            overflow: hidden;
-            text-align: center;
+            position: relative; overflow: hidden; text-align: center;
         }
 
         .premium-card::before {
-            content: 'VIP ELITE';
-            position: absolute;
-            top: 20px;
-            right: -35px;
-            background: var(--accent-primary);
-            color: #030305;
-            font-family: var(--font-display);
-            font-size: 0.65rem;
-            font-weight: 900;
-            padding: 5px 35px;
-            transform: rotate(45deg);
-            letter-spacing: 1px;
+            content: 'VIP ELITE'; position: absolute; top: 20px; right: -35px;
+            background: var(--accent-primary); color: #030305; font-family: var(--font-display);
+            font-size: 0.65rem; font-weight: 900; padding: 5px 35px; transform: rotate(45deg); letter-spacing: 1px;
         }
 
-        .premium-price {
-            font-family: var(--font-display);
-            font-size: 2.8rem;
-            font-weight: 900;
-            color: #fff;
-            margin: 1.5rem 0;
-            text-shadow: 0 0 20px rgba(0, 243, 255, 0.4);
+        .premium-price { font-family: var(--font-display); font-size: 2.8rem; font-weight: 900; color: #fff; margin: 1.5rem 0; text-shadow: 0 0 20px rgba(0, 243, 255, 0.4); }
+        .premium-price span { font-size: 1rem; color: var(--text-muted); font-weight: 400; }
+
+        .premium-features { list-style: none; text-align: left; margin: 2rem 0; }
+        .premium-features li { margin-bottom: 1rem; color: var(--text-main); font-size: 1.05rem; display: flex; align-items: center; gap: 12px; }
+        .premium-features li::before { content: '👑'; }
+
+        /* SUBSCRIPTION CHECKOUT MODAL / PRECISE FLOW */
+        .sub-modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(3, 3, 5, 0.9); backdrop-filter: blur(15px); z-index: 3000;
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none; transition: opacity 0.3s ease; padding: 1rem;
+        }
+        .sub-modal-overlay.active { opacity: 1; pointer-events: auto; }
+
+        .sub-modal-content {
+            background: #0d0d15; border: 1px solid var(--accent-primary); border-radius: 20px;
+            padding: clamp(1.5rem, 4vw, 2.5rem); width: 100%; max-width: 460px; text-align: center;
+            position: relative; box-shadow: 0 0 40px rgba(0, 243, 255, 0.3); max-height: 90vh; overflow-y: auto;
         }
 
-        .premium-price span {
-            font-size: 1rem;
-            color: var(--text-muted);
-            font-weight: 400;
+        /* FLOATING AI ASSISTANT WIDGET */
+        #ai-fab-container { position: fixed; bottom: 25px; right: 25px; z-index: 10000; }
+
+        .ai-fab-btn {
+            width: 60px; height: 60px; background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 1.8rem; cursor: pointer; box-shadow: 0 5px 25px rgba(0, 243, 255, 0.5);
+            border: 2px solid rgba(255, 255, 255, 0.3); transition: var(--transition-smooth);
         }
+        .ai-fab-btn:hover { transform: scale(1.1); box-shadow: 0 8px 30px rgba(0, 243, 255, 0.8); }
 
-        .premium-features {
-            list-style: none;
-            text-align: left;
-            margin: 2rem 0;
+        .ai-chat-popup {
+            position: fixed; bottom: 100px; right: 25px; width: 360px; height: 480px;
+            background: rgba(10, 10, 18, 0.95); backdrop-filter: blur(20px);
+            border: 1px solid var(--accent-primary); border-radius: 18px;
+            display: flex; flex-direction: column; overflow: hidden; z-index: 10000;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7), 0 0 20px rgba(0, 243, 255, 0.2);
+            transform: scale(0); opacity: 0; transform-origin: bottom right; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
+        .ai-chat-popup.active { transform: scale(1); opacity: 1; }
 
-        .premium-features li {
-            margin-bottom: 1rem;
-            color: var(--text-main);
-            font-size: 1.05rem;
-            display: flex;
-            align-items: center;
-            gap: 12px;
+        .chat-header {
+            background: linear-gradient(90deg, rgba(0, 243, 255, 0.15), rgba(121, 40, 202, 0.15));
+            padding: 12px 18px; border-bottom: 1px solid var(--glass-border);
+            display: flex; justify-content: space-between; align-items: center;
         }
+        .chat-header h4 { font-family: var(--font-display); font-size: 0.95rem; color: #fff; display: flex; align-items: center; gap: 8px; }
+        .chat-close-btn { background: transparent; border: none; color: #fff; font-size: 1.4rem; cursor: pointer; transition: color 0.3s; }
+        .chat-close-btn:hover { color: var(--accent-primary); }
 
-        .premium-features li::before {
-            content: '👑';
-        }
+        .chat-messages { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; text-align: left; }
+        .message { padding: 10px 14px; border-radius: 10px; max-width: 85%; font-size: 0.92rem; line-height: 1.4; }
+        .message.bot { background: rgba(0, 243, 255, 0.08); border: 1px solid rgba(0, 243, 255, 0.2); color: #fff; align-self: flex-start; }
+        .message.user { background: rgba(121, 40, 202, 0.2); border: 1px solid rgba(121, 40, 202, 0.4); color: #fff; align-self: flex-end; }
 
-        /* AI ASSISTANT SECTION */
-        .ai-assistant-wrapper {
-            max-width: 800px;
-            margin: 0 auto;
-            height: 520px;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        .chat-messages {
-            flex: 1;
-            padding: 20px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            text-align: left;
-            }
-
-        .message {
-            padding: 12px 18px;
-            border-radius: 12px;
-            max-width: 80%;
-            font-size: 0.98rem;
-            line-height: 1.5;
-        }
-
-        .message.bot {
-            background: rgba(0, 243, 255, 0.08);
-            border: 1px solid rgba(0, 243, 255, 0.2);
-            color: #fff;
-            align-self: flex-start;
-        }
-
-        .message.user {
-            background: rgba(121, 40, 202, 0.2);
-            border: 1px solid rgba(121, 40, 202, 0.4);
-            color: #fff;
-            align-self: flex-end;
-        }
-
-        .chat-input-area {
-            display: flex;
-            padding: 15px 20px;
-            background: rgba(3, 3, 5, 0.95);
-            border-top: 1px solid var(--glass-border);
-            gap: 12px;
-        }
-
+        .chat-input-area { display: flex; padding: 12px; background: rgba(3, 3, 5, 0.95); border-top: 1px solid var(--glass-border); gap: 8px; }
         .chat-input-area input {
-            flex: 1;
-            padding: 12px 16px;
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid var(--glass-border);
-            border-radius: 8px;
-            color: #fff;
-            font-family: var(--font-body);
-            font-size: 1rem;
-            outline: none;
-            transition: var(--transition-smooth);
+            flex: 1; padding: 10px 12px; background: rgba(0, 0, 0, 0.5); border: 1px solid var(--glass-border);
+            border-radius: 6px; color: #fff; font-family: var(--font-body); font-size: 0.95rem; outline: none;
         }
+        .chat-input-area input:focus { border-color: var(--accent-primary); }
 
-        .chat-input-area input:focus {
-            border-color: var(--accent-primary);
-            box-shadow: 0 0 12px rgba(0, 243, 255, 0.2);
+        /* DIRECT WHATSAPP FLOATING BUTTON */
+        #whatsapp-fab {
+            position: fixed; bottom: 25px; left: 25px; z-index: 10000;
+            width: 55px; height: 55px; background: #25d366; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(37, 211, 102, 0.5);
+            transition: var(--transition-smooth); text-decoration: none; border: 2px solid rgba(255, 255, 255, 0.2);
         }
+        #whatsapp-fab:hover { transform: scale(1.1); box-shadow: 0 6px 25px rgba(37, 211, 102, 0.8); }
+        #whatsapp-fab svg { width: 30px; height: 30px; fill: #fff; }
 
-        /* POLICY / CANCELLATION BOX */
-        .policy-box {
-            max-width: 850px;
-            margin: 0 auto;
-            padding: 2.5rem;
-            background: rgba(255, 70, 70, 0.04);
-            border: 1px solid rgba(255, 70, 70, 0.25);
-            text-align: left;
-        }
-
-        .policy-box h3 {
-            font-family: var(--font-display);
-            color: #ff5c5c;
-            margin-bottom: 1rem;
-            font-size: 1.3rem;
-        }
-
-        .policy-box p {
-            color: var(--text-muted);
-            font-size: 1.02rem;
-            line-height: 1.6;
-            margin-bottom: 1rem;
-        }
-
-        /* FEEDBACK SECTION */
-        .feedback-wrapper {
-            max-width: 700px;
-            margin: 0 auto;
-            padding: clamp(1.5rem, 4vw, 2.8rem);
-        }
-
-        .word-counter {
-            font-family: var(--font-code);
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            text-align: right;
-            margin-top: 0.4rem;
-        }
-
-        /* CONTACT SECTION */
-        .contact-wrapper {
-            display: grid;
-            grid-template-columns: 1fr 1.4fr;
-            gap: 3rem;
-        }
-
-        .contact-info-panel, .order-form-panel {
-            padding: 2.5rem;
-        }
-
-        .contact-info-panel h3, .order-form-panel h3 {
-            font-family: var(--font-display);
-            font-size: clamp(1.4rem, 2.5vw, 1.8rem);
-            color: #fff;
-            margin-bottom: 1rem;
-        }
-
-        .contact-info-panel p {
-            color: var(--text-muted);
-            margin-bottom: 1.5rem;
-        }
-
-        .contact-method {
-            display: flex;
-            align-items: flex-start;
-            gap: 1.2rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .contact-icon {
-            width: 45px;
-            height: 45px;
-            background: rgba(121, 40, 202, 0.15);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid rgba(121, 40, 202, 0.3);
-            flex-shrink: 0;
-            box-shadow: 0 0 12px rgba(121, 40, 202, 0.2);
-        }
-
-        .contact-icon svg {
-            width: 22px;
-            height: 22px;
-            fill: none;
-            stroke: #b537f2;
-            stroke-width: 2;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-
-        .contact-details h4 {
-            font-family: var(--font-code);
-            color: #fff;
-            font-size: 0.95rem;
-            margin-bottom: 0.2rem;
-            letter-spacing: 1px;
-        }
-
-        .contact-details a {
-            color: var(--accent-primary);
-            text-decoration: none;
-            font-size: 1.05rem;
-            font-weight: 600;
-            font-family: var(--font-display);
-            transition: var(--transition-smooth);
-            word-break: break-all;
-        }
-
-        .contact-details a:hover {
-            color: #fff;
-        }
-
-        .form-group {
-            margin-bottom: 1.2rem;
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.2rem;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 0.9rem 1.2rem;
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            color: #fff;
-            font-family: var(--font-body);
-            font-size: 1rem;
-            transition: var(--transition-smooth);
-            outline: none;
-        }
-
-        .form-control:focus {
-            border-color: var(--accent-primary);
-            box-shadow: 0 0 12px rgba(0, 243, 255, 0.2);
-            background: rgba(0, 243, 255, 0.04);
-        }
-
-        .form-control::placeholder {
-            color: rgba(255, 255, 255, 0.3);
-            font-family: var(--font-code);
-        }
-
-        textarea.form-control {
-            resize: vertical;
-            min-height: 130px;
-        }
-
-        /* PERSISTENT CONTACT STRIP */
-        .contact-strip {
-            background: linear-gradient(90deg, rgba(3,3,5,0.95), rgba(13,13,21,0.95));
-            border-top: 1px solid rgba(0, 243, 255, 0.25);
-            border-bottom: 1px solid rgba(0, 243, 255, 0.25);
-            padding: 0.9rem 1rem;
-            text-align: center;
-            box-shadow: 0 0 20px rgba(0, 243, 255, 0.08);
-            margin: 1.5rem 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 1.5rem;
-            flex-wrap: wrap;
-        }
-        
-        .contact-strip p {
-            font-family: var(--font-display);
-            font-size: clamp(0.95rem, 2vw, 1.1rem);
-            color: #fff;
-            margin: 0;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .contact-strip .big-number {
-            font-size: clamp(1.3rem, 2.5vw, 1.6rem);
-            color: var(--accent-primary);
-            font-weight: 900;
-            letter-spacing: 1.5px;
-            text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
-        }
-
-        /* STICKY INTERACTIVE MASCOT CHARACTER */
+        /* INTERACTIVE MASCOT CHARACTER */
         #sticky-mascot {
-            position: fixed;
-            bottom: 25px;
-            right: 25px;
-            z-index: 10000;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            pointer-events: none;
+            position: fixed; bottom: 95px; right: 25px; z-index: 9999;
+            display: flex; flex-direction: column; align-items: flex-end; pointer-events: none;
         }
 
         .mascot-speech-bubble {
-            background: var(--glass-bg);
-            border: 1px solid var(--accent-primary);
-            backdrop-filter: blur(10px);
-            color: #fff;
-            padding: 10px 15px;
-            border-radius: 12px;
-            font-family: var(--font-display);
-            font-size: 0.75rem;
-            max-width: 220px;
-            margin-bottom: 8px;
-            box-shadow: 0 5px 20px rgba(0, 243, 255, 0.3);
-            animation: floatBubble 3s ease-in-out infinite;
-            pointer-events: auto;
-            text-align: center;
+            background: var(--glass-bg); border: 1px solid var(--accent-primary); backdrop-filter: blur(10px);
+            color: #fff; padding: 10px 15px; border-radius: 12px; font-family: var(--font-display);
+            font-size: 0.75rem; max-width: 240px; margin-bottom: 8px; box-shadow: 0 5px 20px rgba(0, 243, 255, 0.3);
+            animation: floatBubble 3s ease-in-out infinite; pointer-events: auto; text-align: center; cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
         }
+        .mascot-speech-bubble:hover { background: rgba(0, 243, 255, 0.15); transform: scale(1.03); }
 
         .mascot-avatar {
-            width: 65px;
-            height: 65px;
-            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8rem;
-            box-shadow: 0 0 25px rgba(0, 243, 255, 0.5);
-            pointer-events: auto;
-            cursor: pointer;
+            width: 55px; height: 55px; background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.5); pointer-events: auto; cursor: pointer;
             animation: mascotJump 2s infinite ease-in-out, mascotSmile 4s infinite alternate;
         }
 
-        @keyframes mascotJump {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-12px); }
-        }
+        @keyframes mascotJump { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        @keyframes mascotSmile { 0% { filter: hue-rotate(0deg); } 100% { filter: hue-rotate(45deg); } }
+        @keyframes floatBubble { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
 
-        @keyframes mascotSmile {
-            0% { filter: hue-rotate(0deg); }
-            100% { filter: hue-rotate(45deg); }
+        /* POLICY / FEEDBACK / CONTACT STYLES */
+        .policy-box {
+            max-width: 850px; margin: 0 auto; padding: 2.5rem;
+            background: rgba(255, 70, 70, 0.04); border: 1px solid rgba(255, 70, 70, 0.25); text-align: left;
         }
+        .policy-box h3 { font-family: var(--font-display); color: #ff5c5c; margin-bottom: 1rem; font-size: 1.3rem; }
+        .policy-box p { color: var(--text-muted); font-size: 1.02rem; line-height: 1.6; margin-bottom: 1rem; }
 
-        @keyframes floatBubble {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-4px); }
+        .feedback-wrapper { max-width: 700px; margin: 0 auto; padding: clamp(1.5rem, 4vw, 2.8rem); }
+        .word-counter { font-family: var(--font-code); font-size: 0.85rem; color: var(--text-muted); text-align: right; margin-top: 0.4rem; }
+
+        .contact-wrapper { display: grid; grid-template-columns: 1fr 1.4fr; gap: 3rem; }
+        .contact-info-panel, .order-form-panel { padding: 2.5rem; }
+        .contact-info-panel h3, .order-form-panel h3 { font-family: var(--font-display); font-size: clamp(1.4rem, 2.5vw, 1.8rem); color: #fff; margin-bottom: 1rem; }
+        .contact-info-panel p { color: var(--text-muted); margin-bottom: 1.5rem; }
+
+        .contact-method { display: flex; align-items: flex-start; gap: 1.2rem; margin-bottom: 1.5rem; }
+        .contact-icon {
+            width: 45px; height: 45px; background: rgba(121, 40, 202, 0.15); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; border: 1px solid rgba(121, 40, 202, 0.3);
+            flex-shrink: 0; box-shadow: 0 0 12px rgba(121, 40, 202, 0.2);
         }
+        .contact-icon svg { width: 22px; height: 22px; fill: none; stroke: #b537f2; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+        .contact-details h4 { font-family: var(--font-code); color: #fff; font-size: 0.95rem; margin-bottom: 0.2rem; letter-spacing: 1px; }
+        .contact-details a { color: var(--accent-primary); text-decoration: none; font-size: 1.05rem; font-weight: 600; font-family: var(--font-display); transition: var(--transition-smooth); word-break: break-all; }
+        .contact-details a:hover { color: #fff; }
 
-        /* FOOTER */
-        footer {
-            background: #010103;
-            padding: 2.5rem 0;
-            border-top: 1px solid var(--glass-border);
-            text-align: center;
-            position: relative;
-            z-index: 10;
+        .form-group { margin-bottom: 1.2rem; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+        .form-control {
+            width: 100%; padding: 0.9rem 1.2rem; background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: #fff;
+            font-family: var(--font-body); font-size: 1rem; transition: var(--transition-smooth); outline: none;
         }
+        .form-control:focus { border-color: var(--accent-primary); box-shadow: 0 0 12px rgba(0, 243, 255, 0.2); background: rgba(0, 243, 255, 0.04); }
+        .form-control::placeholder { color: rgba(255, 255, 255, 0.3); font-family: var(--font-code); }
+        textarea.form-control { resize: vertical; min-height: 130px; }
 
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 1.2rem;
-            margin-bottom: 1.5rem;
+        .contact-strip {
+            background: linear-gradient(90deg, rgba(3,3,5,0.95), rgba(13,13,21,0.95));
+            border-top: 1px solid rgba(0, 243, 255, 0.25); border-bottom: 1px solid rgba(0, 243, 255, 0.25);
+            padding: 0.9rem 1rem; text-align: center; box-shadow: 0 0 20px rgba(0, 243, 255, 0.08); margin: 1.5rem 0;
+            display: flex; justify-content: center; align-items: center; gap: 1.5rem; flex-wrap: wrap;
         }
+        .contact-strip p {
+            font-family: var(--font-display); font-size: clamp(0.95rem, 2vw, 1.1rem); color: #fff; margin: 0;
+            display: flex; align-items: center; gap: 12px; flex-wrap: wrap; justify-content: center;
+        }
+        .contact-strip .big-number { font-size: clamp(1.3rem, 2.5vw, 1.6rem); color: var(--accent-primary); font-weight: 900; letter-spacing: 1.5px; text-shadow: 0 0 10px rgba(0, 243, 255, 0.5); }
 
+        footer { background: #010103; padding: 2.5rem 0; border-top: 1px solid var(--glass-border); text-align: center; position: relative; z-index: 10; }
+        .social-links { display: flex; justify-content: center; gap: 1.2rem; margin-bottom: 1.5rem; }
         .social-link {
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: var(--transition-smooth);
-            color: #fff;
+            width: 42px; height: 42px; border-radius: 50%; background: var(--glass-bg); border: 1px solid var(--glass-border);
+            display: flex; align-items: center; justify-content: center; transition: var(--transition-smooth); color: #fff;
         }
+        .social-link:hover { background: var(--accent-primary); border-color: var(--accent-primary); color: #030305; transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0, 243, 255, 0.4); }
+        .social-link svg { width: 18px; height: 18px; fill: currentColor; }
 
-        .social-link:hover {
-            background: var(--accent-primary);
-            border-color: var(--accent-primary);
-            color: #030305;
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 243, 255, 0.4);
-        }
+        .copyright { color: var(--text-muted); font-family: var(--font-code); font-size: 0.85rem; padding: 0 1rem; }
+        .copyright span { color: var(--accent-primary); }
 
-        .social-link svg {
-            width: 18px;
-            height: 18px;
-            fill: currentColor;
-        }
-
-        .copyright {
-            color: var(--text-muted);
-            font-family: var(--font-code);
-            font-size: 0.85rem;
-            padding: 0 1rem;
-        }
-
-        .copyright span {
-            color: var(--accent-primary);
-        }
-
-        /* RESPONSIVE MEDIA QUERIES */
         @media screen and (max-width: 992px) {
-            .about-grid, .contact-wrapper {
-                grid-template-columns: 1fr;
-                gap: 2.5rem;
-            }
+            .about-grid, .contact-wrapper { grid-template-columns: 1fr; gap: 2.5rem; }
             .section-padding { padding: 70px 0; }
         }
 
         @media screen and (max-width: 768px) {
             .nav-links {
-                position: fixed;
-                top: calc(var(--nav-height) + 32px);
-                left: -100%;
-                width: 100%;
-                height: calc(100vh - var(--nav-height) - 32px);
-                background: rgba(3, 3, 5, 0.98);
-                backdrop-filter: blur(20px);
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                gap: 2rem;
-                transition: 0.4s ease-in-out;
-                z-index: 999;
+                position: fixed; top: calc(var(--nav-height) + 32px); left: -100%; width: 100%;
+                height: calc(100vh - var(--nav-height) - 32px); background: rgba(3, 3, 5, 0.98); backdrop-filter: blur(20px);
+                flex-direction: column; align-items: center; justify-content: center; gap: 2rem; transition: 0.4s ease-in-out; z-index: 999;
             }
             .nav-links.active { left: 0; }
             .mobile-menu-btn { display: block; }
             .hero-cta-group { flex-direction: column; width: 100%; }
-            .hero-cta-group .btn { width: 100%; }
+            .hero-cta-group .btn, .hero-cta-group button { width: 100%; }
             .form-row { grid-template-columns: 1fr; }
             .calculator-wrapper, .contact-info-panel, .order-form-panel, .feedback-wrapper, .policy-box { padding: 1.5rem; }
+            .ai-chat-popup { width: 90vw; right: 5vw; height: 420px; }
         }
 
-        .reveal {
-            opacity: 0;
-            transform: translateY(25px);
-            transition: all 0.6s ease-out;
-        }
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        .reveal { opacity: 0; transform: translateY(25px); transition: all 0.6s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
     </style>
 </head>
 <body>
 
-    <!-- STICKY INSTAGRAM HANDLE BAR -->
+    <!-- STICKY INSTAGRAM BAR WITH GOOGLE AUTH -->
     <div class="sticky-insta-bar">
         <a href="https://instagram.com/creator_abhayraj" target="_blank">
             📷 Instagram: @creator_abhayraj
         </a>
+        <div class="user-auth-status" id="authStatusContainer">
+            <span id="userGreeting" style="display:none;">Welcome, <strong id="userNameDisplay">User</strong></span>
+            <button class="auth-btn-small" id="authActionButton" onclick="toggleGoogleAuth()">Login with Gmail</button>
+        </div>
     </div>
 
     <!-- BACKGROUND ENGINE -->
@@ -1305,8 +738,7 @@
                 <li><a href="#home">Home</a></li>
                 <li><a href="#calculator">Pricing</a></li>
                 <li><a href="#services">Services</a></li>
-                <li><a href="#premium">Premium</a></li>
-                <li><a href="#ai-assistant">AI Assistant</a></li>
+                <li><a href="#premium">Subscription</a></li>
                 <li><a href="#feedback">Feedback</a></li>
                 <li><a href="#policy">Policy</a></li>
                 <li><a href="#contact">Contact</a></li>
@@ -1326,7 +758,10 @@
                     <p class="hero-subtitle">Building High-Tech <span class="typing-text" id="typing-text">Websites</span></p>
                     <div class="hero-cta-group">
                         <a href="#calculator" class="btn">Instant Website Calculator</a>
-                        <a href="#premium" class="btn btn-outline">Explore Premium Club</a>
+                        <button class="google-auth-btn" onclick="toggleGoogleAuth()">
+                            <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.11-6.72-4.95H1.2v3.14C3.18 21.35 7.23 24 12 24z"/><path fill="#FBBC05" d="M5.28 14.25c-.25-.72-.38-1.49-.38-2.25s.13-1.53.38-2.25V6.61H1.2C.44 8.15 0 9.88 0 12s.44 3.85 1.2 5.39l4.08-3.14z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.23 0 3.18 2.65 1.2 6.61l4.08 3.14c.95-2.84 3.6-4.95 6.72-4.95z"/></svg>
+                            Sign In with Gmail
+                        </button>
                     </div>
                 </div>
             </div>
@@ -1341,7 +776,7 @@
         <section id="calculator" class="section-padding">
             <div class="container">
                 <h2 class="section-title reveal">Instant Website Calculator</h2>
-                
+
                 <div class="calculator-wrapper glass-panel reveal">
                     <div class="calc-group">
                         <div class="calc-label">Select Website Type:</div>
@@ -1377,7 +812,7 @@
                 </div>
             </div>
         </section>
-
+        
         <!-- PERSISTENT CONTACT STRIP -->
         <div class="contact-strip">
             <p>Trusted Web Development & Design: <span class="big-number">9306882926</span></p>
@@ -1478,7 +913,7 @@
                         <h3 class="service-title">Firebase & Security</h3>
                         <p class="service-desc">Integrated authentication, databases, and secure encrypted backend control.</p>
                         <ul class="service-features">
-                            <li>Secure Authentication</li>
+                            <li>Secure Gmail Auth</li>
                             <li>Admin Dashboard</li>
                             <li>Real-time Data Sync</li>
                         </ul>
@@ -1487,10 +922,10 @@
             </div>
         </section>
 
-        <!-- PREMIUM MEMBERSHIP PAGE SECTION -->
+        <!-- SUBSCRIPTION PAGE SECTION (Updated from Instagram to Buy Subscription with precise flow) -->
         <section id="premium" class="section-padding">
             <div class="container">
-                <h2 class="section-title reveal">Buy Premium Membership</h2>
+                <h2 class="section-title reveal">Buy Subscription</h2>
                 <p class="section-subtitle" style="text-align: center; color: var(--text-muted); margin-bottom: 2rem;">Unlock VIP privileges and eliminate advance payment barriers.</p>
                 
                 <div class="glass-panel premium-card reveal">
@@ -1502,27 +937,9 @@
                         <li>Unlimited 2-week post-launch edits extended year-round</li>
                         <li>Direct priority access to AI assistant & developer updates</li>
                     </ul>
-                    <a href="https://instagram.com/creator_abhayraj" target="_blank" class="btn" style="width: 100%; margin-top: 1rem;">Join Premium via Instagram</a>
+                    <button type="button" class="btn" style="width: 100%; margin-top: 1rem;" onclick="openSubscriptionFlow()">Buy Subscription Now</button>
                 </div>
             </div>
-        </section>
-
-        <!-- AI ASSISTANT SECTION -->
-        <section id="ai-assistant" class="section-padding">
-            <div class="container">
-                <h2 class="section-title reveal">AI Assistant</h2>
-                <p style="text-align: center; color: var(--text-muted); margin-bottom: 2rem;">Ask me anything about pricing, 7-day build time, custom domains, or cancellation policies!</p>
-                
-                <div class="ai-assistant-wrapper glass-panel reveal">
-                    <div class="chat-messages" id="chatMessages">
-                        <div class="message bot">Hello! I am your AI assistant for Creator Abhayraj. How can I help you build your digital empire today?</div>
-                    </div>
-                    <div class="chat-input-area">
-                        <input type="text" id="userInput" placeholder="Ask a question (e.g., build time, custom domain, pricing)..." onkeypress="handleKeyPress(event)">
-                        <button class="btn" onclick="sendMessage()">Send</button>
-                    </div>
-                </div>
-             </div>
         </section>
 
         <!-- FEEDBACK SECTION -->
@@ -1633,10 +1050,34 @@
         </section>
     </main>
 
+    <!-- FLOATING DIRECT WHATSAPP BUTTON -->
+    <a href="https://wa.me/919306882926?text=Hi%20Abhayraj,%20I%20want%20to%20build%20a%20website!" target="_blank" id="whatsapp-fab" aria-label="Chat on WhatsApp">
+        <svg viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.124-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+    </a>
+
+    <!-- FLOATING AI ASSISTANT WIDGET -->
+    <div id="ai-fab-container">
+        <div class="ai-fab-btn" onclick="toggleAIChat()" title="Chat with AI Assistant">🤖</div>
+        
+        <div class="ai-chat-popup" id="aiChatPopup">
+            <div class="chat-header">
+                <h4>🤖 Creator Abhayraj AI</h4>
+                <button class="chat-close-btn" onclick="toggleAIChat()">&times;</button>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="message bot">Hello! I am your advanced AI assistant for Creator Abhayraj. Ask me anything about our 7-day build time, custom domains, premium club, or Google Auth!</div>
+            </div>
+            <div class="chat-input-area">
+                <input type="text" id="userInput" placeholder="Ask a question..." onkeypress="handleKeyPress(event)">
+                <button class="btn" style="padding: 8px 14px; font-size: 0.85rem;" onclick="sendMessage()">Send</button>
+            </div>
+        </div>
+    </div>
+
     <!-- STICKY INTERACTIVE MASCOT -->
     <div id="sticky-mascot">
-        <div class="mascot-speech-bubble" id="mascotSpeech">⚡ Welcome to Creator Abhayraj! Let's build your site!</div>
-        <div class="mascot-avatar" onclick="triggerMascotQuote()" title="Click me for tips!">🤖</div>
+        <div class="mascot-speech-bubble" id="mascotSpeech" onclick="handleMascotBubbleClick()">⚡ Welcome to Creator Abhayraj! Click here to configure pricing!</div>
+        <div class="mascot-avatar" onclick="triggerMascotQuote()" title="Click me for tips!">🚀</div>
     </div>
 
     <!-- FOOTER -->
@@ -1670,7 +1111,84 @@
             </div>
         </div>
     </div>
-    <!-- JAVASCRIPT ENGINE -->
+
+    <!-- PRECISE SUBSCRIPTION CHECKOUT FLOW MODAL -->
+    <div class="sub-modal-overlay" id="subModalOverlay">
+        <div class="sub-modal-content">
+            <button class="modal-close-btn" onclick="closeSubscriptionFlow()">&times;</button>
+            <h3 style="font-family: var(--font-display); color: #fff; margin-bottom: 0.5rem;">Creator Elite Club</h3>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">Annual Subscription: <strong style="color: var(--accent-primary);">₹2,500 / year</strong></p>
+            
+            <form id="subCheckoutForm" onsubmit="processSubscription(event)">
+                <div class="form-group" id="subNameGroup">
+                    <input type="text" id="subNameInput" class="form-control" placeholder="Enter Your Full Name" required>
+                </div>
+                <div class="form-group" id="subPhoneGroup">
+                    <input type="tel" id="subPhoneInput" class="form-control" placeholder="Enter Your Phone Number" required>
+                </div>
+                <div style="background: rgba(0,243,255,0.05); border: 1px solid rgba(0,243,255,0.2); padding: 10px; border-radius: 8px; margin-bottom: 15px; text-align: left; font-size: 0.85rem; color: var(--accent-primary);" id="autoRecognizedNotice" style="display:none;">
+                    ✓ Account verified! Name & Phone automatically synced from your profile.
+                </div>
+                <button type="submit" class="btn" style="width: 100%;">Proceed to Payment QR</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT ENGINE WITH FIREBASE GMAIL AUTH & ADVANCED AI -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-analytics.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCW_kQKCf9iQRjyB2O0Vv7jNbmoURsIgc0",
+            authDomain: "creator-abhay.firebaseapp.com",
+            projectId: "creator-abhay",
+            storageBucket: "creator-abhay.firebasestorage.app",
+            messagingSenderId: "199280063435",
+            appId: "1:199280063435:web:c7a416da55a0e9ae98fc4e",
+            measurementId: "G-KQH2BKLS13"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+
+        // Make auth globally available
+        window.firebaseAuth = auth;
+
+        window.toggleGoogleAuth = function() {
+            if (auth.currentUser) {
+                signOut(auth).then(() => {
+                    alert("Successfully logged out.");
+                }).catch((error) => { console.error(error); });
+            } else {
+                signInWithPopup(auth, provider).then((result) => {
+                    alert(`Welcome, ${result.user.displayName}! Successfully logged in with Gmail.`);
+                }).catch((error) => {
+                    alert("Google Sign-In failed: " + error.message);
+                });
+            }
+        };
+
+        onAuthStateChanged(auth, (user) => {
+            const greeting = document.getElementById('userGreeting');
+            const nameDisplay = document.getElementById('userNameDisplay');
+            const authBtn = document.getElementById('authActionButton');
+
+            if (user) {
+                nameDisplay.innerText = user.displayName || user.email;
+                greeting.style.display = 'inline';
+                authBtn.innerText = 'Logout';
+            } else {
+                greeting.style.display = 'none';
+                authBtn.innerText = 'Login with Gmail';
+            }
+        });
+    </script>
+
+    <!-- UI & GENERAL JAVASCRIPT ENGINE -->
     <script>
         // BACKGROUND ENGINE
         const canvas = document.getElementById('particle-canvas');
@@ -1684,7 +1202,6 @@
             width = canvas.width = window.innerWidth;
             height = canvas.height = window.innerHeight;
         }
-
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
@@ -1828,7 +1345,7 @@
             updatePriceCalculation();
         });
 
-        function getCurrentPrice() {
+                function getCurrentPrice() {
             const pages = parseInt(pagesSlider.value);
             return selectedBasePrice + ((pages - 1) * 500);
         }
@@ -1888,17 +1405,80 @@
                 }
             }, 1000);
         }
-        
+
         function handlePaymentCompletion() {
             const userName = prompt("Payment completed! Please enter your Name for confirmation:", "Valued Client");
             if (userName !== null) {
                 const preWrittenMsg = encodeURIComponent(`Hi Abhayraj, I have completed the payment of ₹${getCurrentPrice()}. My name is ${userName}. Please start building my website.`);
                 window.location.href = `https://wa.me/919306882926?text=${preWrittenMsg}`;
-            }
-        }
+             }
+          }
 
         gpayLink.addEventListener('click', (e) => { e.preventDefault(); window.location.href = gpayLink.href; setTimeout(handlePaymentCompletion, 1500); });
         paytmLink.addEventListener('click', (e) => { e.preventDefault(); window.location.href = paytmLink.href; setTimeout(handlePaymentCompletion, 1500); });
+
+        // SUBSCRIPTION CHECKOUT FLOW WITH SMART GOOGLE AUTH RECOGNITION
+        function openSubscriptionFlow() {
+            const modal = document.getElementById('subModalOverlay');
+            const nameGroup = document.getElementById('subNameGroup');
+            const phoneGroup = document.getElementById('subPhoneGroup');
+            const nameInput = document.getElementById('subNameInput');
+            const phoneInput = document.getElementById('subPhoneInput');
+            const notice = document.getElementById('autoRecognizedNotice');
+
+            modal.classList.add('active');
+
+            // Check if user is logged in via Firebase Auth
+            if (window.firebaseAuth && window.firebaseAuth.currentUser) {
+                const user = window.firebaseAuth.currentUser;
+                nameInput.value = user.displayName || "";
+                phoneInput.value = user.phoneNumber || "";
+                
+                // If logged in, hide or lock fields and show recognition notice
+                if(user.displayName) {
+                    nameGroup.style.display = 'none';
+                }
+                if(user.phoneNumber) {
+                    phoneGroup.style.display = 'none';
+                }
+                notice.style.display = 'block';
+                notice.innerText = `✓ Recognized account: ${user.email}. Please verify details to proceed.`;
+            } else {
+                nameGroup.style.display = 'block';
+                phoneGroup.style.display = 'block';
+                notice.style.display = 'none';
+                nameInput.value = '';
+                phoneInput.value = '';
+            }
+        }
+        window.openSubscriptionFlow = openSubscriptionFlow;
+
+        function closeSubscriptionFlow() {
+            document.getElementById('subModalOverlay').classList.remove('active');
+        }
+        window.closeSubscriptionFlow = closeSubscriptionFlow;
+
+        function processSubscription(e) {
+            e.preventDefault();
+            const name = document.getElementById('subNameInput').value || (window.firebaseAuth?.currentUser?.displayName) || "Client";
+            const phone = document.getElementById('subPhoneInput').value || (window.firebaseAuth?.currentUser?.phoneNumber) || "Not Provided";
+            
+            closeSubscriptionFlow();
+
+            // Open QR Modal for ₹2,500 Subscription
+            const subPrice = 2500;
+            modalPriceText.innerText = "₹" + subPrice.toLocaleString('en-IN');
+            const upiId = "9306882926@ptyes";
+            const upiUri = `upi://pay?pa=${upiId}&pn=CreatorAbhayraj&am=${subPrice}&cu=INR`;
+            
+            upiQrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(upiUri)}`;
+            gpayLink.href = `tez://upi/pay?pa=${upiId}&pn=CreatorAbhayraj&am=${subPrice}&cu=INR`;
+            paytmLink.href = `paytmmp://pay?pa=${upiId}&pn=CreatorAbhayraj&am=${subPrice}&cu=INR`;
+
+            qrModalOverlay.classList.add('active');
+            startTimer(60);
+        }
+        window.processSubscription = processSubscription;
 
         // FEEDBACK WORD LIMIT & WHATSAPP
         const feedbackForm = document.getElementById('feedbackForm');
@@ -1929,15 +1509,24 @@
             window.location.href = whatsappUrl;
         });
 
-        // ENHANCED RELIABLE AI ASSISTANT BOT LOGIC
+        // FLOATING AI ASSISTANT WIDGET TOGGLE
+        function toggleAIChat() {
+            const popup = document.getElementById('aiChatPopup');
+            popup.classList.toggle('active');
+        }
+        window.toggleAIChat = toggleAIChat;
+
+        // ENHANCED AI ASSISTANT LOGIC
         const knowledgeBase = [
             { keywords: ['time', 'days', 'long', 'build', 'rapid'], response: 'Our standard website building time is approx 7 days from project confirmation!' },
             { keywords: ['domain', 'custom', 'advance', 'rs 1000', '1000'], response: 'Custom domain names are available upon an advance payment of Rs 1,000 or above. Premium members get custom domains without advance payment!' },
             { keywords: ['cancel', 'refund', 'money', 'policy'], response: 'You can cancel anytime before work starts. Once submitted and active work begins, cancellation is locked until completion. Refunds require re-assigning the project back to Creator Abhayraj.' },
-            { keywords: ['premium', '2500', 'year', 'club', 'membership'], response: 'Our Premium Membership is Rs 2,500/year, featuring free custom domains without advance payment, rapid priority service, and full support!' },
+            { keywords: ['premium', '2500', 'year', 'club', 'membership', 'subscription'], response: 'Our Premium Subscription is Rs 2,500/year, featuring free custom domains without advance payment, rapid priority service, and full support!' },
             { keywords: ['instagram', 'contact', 'connect', 'abhayraj', 'handle'], response: 'You can connect directly via Instagram at @creator_abhayraj pinned at the top of the page, or call 9306882926!' },
             { keywords: ['pricing', 'cost', 'price', 'calculator'], response: 'Our pricing starts at Rs 2,500 for portfolios. You can use our interactive Instant Calculator above to configure your exact project cost!' },
-            { keywords: ['support', 'edit', 'weeks'], response: 'We offer comprehensive website edits and adjustments tailored to customer requests for up to 2 weeks post-launch.' }
+            { keywords: ['support', 'edit', 'weeks'], response: 'We offer comprehensive website edits and adjustments tailored to customer requests for up to 2 weeks post-launch.' },
+            { keywords: ['auth', 'login', 'google', 'gmail'], response: 'You can securely sign in with your Gmail account anytime using the "Login with Gmail" button at the top of the page!' },
+            { keywords: ['whatsapp', 'chat', 'call'], response: 'You can reach Abhayraj directly via phone at 9306882926 or via the floating WhatsApp button on the bottom left!' }
         ];
 
         function sendMessage() {
@@ -1962,8 +1551,10 @@
                 appendMessage(botReply, 'bot');
             }, 600);
         }
+        window.sendMessage = sendMessage;
 
         function handleKeyPress(e) { if (e.key === 'Enter') { sendMessage(); } }
+        window.handleKeyPress = handleKeyPress;
 
         function appendMessage(text, sender) {
             const container = document.getElementById('chatMessages');
@@ -1974,28 +1565,45 @@
             container.scrollTop = container.scrollHeight;
         }
 
-        // MASCOT RANDOM QUOTES & ANIMATION
-        const mascotQuotes = [
-            "⚡ Blazing speed & glassmorphism design!",
-            "👑 Join Creator Elite Club for Rs 2,500/yr!",
-            "🚀 7-day build time with total excellence!",
-            "💬 Ask our AI Assistant anything you need!",
-            "📷 Follow & DM @creator_abhayraj on Instagram!"
+        // INTERACTIVE MASCOT WITH REDIRECTION LINKS
+        const mascotMessages = [
+            { text: "⚡ Welcome to Creator Abhayraj! Click here to configure pricing!", link: "#calculator" },
+            { text: "👑 Unlock VIP perks with our Subscription Club! Click to view!", link: "#premium" },
+            { text: "🚀 Need a site in 7 days? Click here to check services!", link: "#services" },
+            { text: "🤖 Have questions? Click to open our floating AI assistant!", action: "openAI" },
+            { text: "🔒 Secure your Gmail login at the top! Click to scroll up!", link: "#home" }
         ];
 
+        let currentMascotIndex = 0;
+
         function triggerMascotQuote() {
+            currentMascotIndex = (currentMascotIndex + 1) % mascotMessages.length;
+            updateMascotBubble();
+        }
+        window.triggerMascotQuote = triggerMascotQuote;
+
+        function updateMascotBubble() {
             const bubble = document.getElementById('mascotSpeech');
-            const randomIndex = Math.floor(Math.random() * mascotQuotes.length);
-            bubble.innerText = mascotQuotes[randomIndex];
-            bubble.style.transform = 'scale(1.1)';
+            const current = mascotMessages[currentMascotIndex];
+            bubble.innerText = current.text;
+            bubble.style.transform = 'scale(1.08)';
             setTimeout(() => { bubble.style.transform = 'scale(1)'; }, 300);
         }
 
+        function handleMascotBubbleClick() {
+            const current = mascotMessages[currentMascotIndex];
+            if (current.link) {
+                window.location.href = current.link;
+            } else if (current.action === "openAI") {
+                toggleAIChat();
+            }
+        }
+        window.handleMascotBubbleClick = handleMascotBubbleClick;
+
         setInterval(() => {
-            const bubble = document.getElementById('mascotSpeech');
-            const randomIndex = Math.floor(Math.random() * mascotQuotes.length);
-            bubble.innerText = mascotQuotes[randomIndex];
-        }, 7000);
+            currentMascotIndex = (currentMascotIndex + 1) % mascotMessages.length;
+            updateMascotBubble();
+        }, 8000);
 
         // SCROLL REVEAL OBSERVER
         const revealElements = document.querySelectorAll('.reveal');
@@ -2003,25 +1611,6 @@
             entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('active'); } });
         }, { threshold: 0.1 });
         revealElements.forEach(el => revealObserver.observe(el));
-    </script>
-
-    <!-- Firebase SDK Integration -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-analytics.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyCW_kQKCf9iQRjyB2O0Vv7jNbmoURsIgc0",
-            authDomain: "creator-abhay.firebaseapp.com",
-            projectId: "creator-abhay",
-            storageBucket: "creator-abhay.firebasestorage.app",
-            messagingSenderId: "199280063435",
-            appId: "1:199280063435:web:c7a416da55a0e9ae98fc4e",
-            measurementId: "G-KQH2BKLS13"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
     </script>
 </body>
 </html>
