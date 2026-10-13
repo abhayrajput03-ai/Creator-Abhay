@@ -1758,12 +1758,7 @@
                     updateUIWithUser(null);
                 } catch(e) { console.error(e); }
             } else {
-                try {
-                    const result = await signInWithPopup(auth, provider);
-                    updateUIWithUser(result.user);
-                    alert(`Welcome, ${result.user.displayName || 'Creator Client'}! Signed in successfully.`);
-                } catch (error) {
-                    console.warn("Popup blocked or failed, falling back to redirect:", error);
+                
                     try {
                         await signInWithRedirect(auth, provider);
                     } catch(redirectErr) {
