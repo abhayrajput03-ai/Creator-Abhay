@@ -9,7 +9,10 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+    <!-- Three.js (Lightweight WebGL Core) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
     <style>
         :root {
@@ -19,9 +22,10 @@
             --accent-primary: #00f3ff;
             --accent-secondary: #7928ca;
             --accent-purple: #9d4edd;
-            --glass-bg: rgba(18, 18, 28, 0.78);
-            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-bg: rgba(18, 18, 28, 0.72);
+            --glass-border: rgba(0, 243, 255, 0.18);
             --font-display: 'Orbitron', sans-serif;
+            --font-cinematic: 'Cinzel', serif;
             --font-body: 'Rajdhani', sans-serif;
             --font-code: 'Share Tech Mono', monospace;
             --transition-smooth: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
@@ -42,19 +46,172 @@
             -webkit-font-smoothing: antialiased; -webkit-tap-highlight-color: transparent;
         }
 
-        #particle-canvas {
+        /* HARDWARE ACCELERATED UNIFIED 3D BACKGROUND (LOCKED 60FPS) */
+        #main-site-canvas {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            z-index: -1; pointer-events: none;
-            background: radial-gradient(circle at center, #0d0d15 0%, #030305 100%);
+            z-index: -1; pointer-events: none; will-change: transform;
+        }
+
+        /* INTERACTIVE LIGHT RUNNER / CURSOR TRAIL */
+        #cursor-glow {
+            position: fixed; width: 380px; height: 380px;
+            background: radial-gradient(circle, rgba(0, 243, 255, 0.12) 0%, rgba(121, 40, 202, 0.08) 45%, transparent 70%);
+            border-radius: 50%; pointer-events: none; z-index: 0; transform: translate(-50%, -50%);
+            transition: opacity 0.3s ease; will-change: left, top;
+        }
+
+        /* SCROLL PROGRESS BAR */
+        #scroll-tracker {
+            position: fixed; top: 0; left: 0; height: 3px; width: 0%;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary), #ff007f);
+            z-index: 10001; box-shadow: 0 0 10px var(--accent-primary);
+            transition: width 0.1s linear;
         }
 
         .noise-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: url('data:image/svg+xml;utf8,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)" opacity="0.04"%3E%3C/rect%3E%3C/svg%3E');
+            background: url('data:image/svg+xml;utf8,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)" opacity="0.03"%3E%3C/rect%3E%3C/svg%3E');
             z-index: 0; pointer-events: none;
         }
 
-        /* STICKY INSTAGRAM BAR & SIGN UP STATUS */
+        /* ==========================================================
+           CINEMATIC INTRO OVERLAY
+        ========================================================== */
+        #cinematic-intro {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: #020204; z-index: 999999; overflow: hidden;
+            display: flex; align-items: center; justify-content: center;
+            transition: opacity 1.1s cubic-bezier(0.77, 0, 0.175, 1), transform 1.1s cubic-bezier(0.77, 0, 0.175, 1);
+            will-change: opacity, transform;
+        }
+
+        #cinematic-intro.hide {
+            opacity: 0; pointer-events: none; transform: scale(1.08);
+        }
+
+        #intro-webgl-canvas {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;
+        }
+
+        .cinematic-vignette {
+            position: absolute; inset: 0;
+            background: radial-gradient(circle at center, rgba(10, 5, 20, 0.05) 0%, rgba(2, 2, 4, 0.8) 70%, #020204 100%);
+            z-index: 2; pointer-events: none;
+        }
+
+        .intro-top-nav {
+            position: absolute; top: 0; left: 0; width: 100%; padding: 30px 45px;
+            display: flex; justify-content: space-between; align-items: center; z-index: 10;
+            font-family: var(--font-code); font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+        }
+
+        .intro-nav-links { display: flex; gap: 28px; opacity: 0.7; }
+
+        .intro-sound-btn {
+            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff; padding: 6px 16px; border-radius: 20px; cursor: pointer;
+            font-family: var(--font-code); font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+        .intro-sound-btn:hover { background: #fff; color: #000; }
+
+        .skip-intro-btn {
+            background: rgba(0, 243, 255, 0.12); border: 1px solid var(--accent-primary);
+            color: var(--accent-primary); padding: 6px 18px; border-radius: 20px;
+            cursor: pointer; font-family: var(--font-code); font-size: 10px; letter-spacing: 1.5px;
+            text-transform: uppercase; transition: all 0.3s ease; box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
+        }
+        .skip-intro-btn:hover { background: var(--accent-primary); color: #000; box-shadow: 0 0 25px rgba(0, 243, 255, 0.8); }
+
+        .stage-layer {
+            position: absolute; inset: 0; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; z-index: 5; pointer-events: none;
+            opacity: 0; transform: scale(0.94);
+            transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .stage-layer.active { opacity: 1; transform: scale(1); pointer-events: auto; }
+
+        .cinematic-hero-title {
+            font-family: var(--font-cinematic); font-size: clamp(2.4rem, 7.8vw, 6.8rem);
+            letter-spacing: 0.18em; text-transform: uppercase; color: #f7f7f7; text-align: center;
+            line-height: 1.1; font-weight: 300; display: flex; align-items: center; justify-content: center;
+            gap: 1.5vw; text-shadow: 0 0 40px rgba(168, 85, 247, 0.5), 0 0 80px rgba(0, 243, 255, 0.2);
+            animation: heroTitleFloat 4s ease-in-out infinite alternate;
+        }
+        @keyframes heroTitleFloat {
+            0% { transform: translateY(0px) scale(1); }
+            100% { transform: translateY(-8px) scale(1.02); }
+        }
+
+        .cinematic-sub-left {
+            position: absolute; bottom: 60px; left: 55px; font-family: var(--font-code);
+            font-size: 11px; letter-spacing: 3px; color: rgba(255, 255, 255, 0.7);
+            text-transform: uppercase; line-height: 1.6;
+        }
+
+        .cinematic-sub-right {
+            position: absolute; bottom: 60px; right: 55px; font-family: var(--font-code);
+            font-size: 11px; letter-spacing: 3px; color: rgba(255, 255, 255, 0.7);
+            text-transform: uppercase; line-height: 1.6; text-align: right;
+        }
+
+        .smoke-burst-card {
+            max-width: 720px; width: 88%; text-align: center; padding: 40px;
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.22) 0%, rgba(88, 28, 135, 0.1) 60%, transparent 90%);
+            border: 1px solid rgba(192, 132, 252, 0.35); border-radius: 28px;
+            backdrop-filter: blur(18px); box-shadow: 0 0 90px rgba(168, 85, 247, 0.45);
+        }
+
+        .smoke-quote {
+            font-family: var(--font-cinematic); font-size: clamp(1.05rem, 2.3vw, 1.45rem);
+            letter-spacing: 3px; line-height: 1.8; color: #ffffff; text-transform: uppercase;
+            margin-bottom: 25px; text-shadow: 0 0 25px rgba(233, 213, 255, 0.8);
+        }
+
+        .counter-pill {
+            display: inline-flex; align-items: center; gap: 15px; font-family: var(--font-code);
+            font-size: 1.35rem; color: #e9d5ff; border: 1px solid rgba(216, 180, 254, 0.5);
+            padding: 8px 26px; border-radius: 30px; background: rgba(0,0,0,0.6); letter-spacing: 2px;
+            box-shadow: 0 0 30px rgba(168, 85, 247, 0.35);
+        }
+
+        .enter-portal-btn {
+            font-family: var(--font-display); font-size: 0.95rem; letter-spacing: 2px;
+            padding: 14px 34px; border-radius: 30px; background: linear-gradient(135deg, #a855f7, #00f3ff);
+            border: none; color: #030305; font-weight: 700; cursor: pointer;
+            box-shadow: 0 0 35px rgba(168, 85, 247, 0.7); transition: all 0.3s ease;
+        }
+        .enter-portal-btn:hover { transform: scale(1.06); box-shadow: 0 0 50px rgba(0, 243, 255, 0.9); }
+
+        /* ==========================================================
+           ANIMATED GLASS PANELS & BORDERS
+        ========================================================== */
+        .glass-panel {
+            background: var(--glass-bg); backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px); border: 1px solid var(--glass-border);
+            border-radius: 20px; box-shadow: 0 20px 45px rgba(0, 0, 0, 0.65);
+            position: relative; overflow: hidden; will-change: transform;
+            transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.4s ease, border-color 0.4s ease;
+        }
+        /* Continuous animated border shine layer */
+        .glass-panel::after {
+            content: ''; position: absolute; inset: -2px; border-radius: 22px;
+            background: linear-gradient(135deg, transparent 40%, rgba(0,243,255,0.3) 50%, transparent 60%);
+            background-size: 300% 300%; pointer-events: none; z-index: 0;
+            animation: borderBeam 6s ease-in-out infinite;
+        }
+        @keyframes borderBeam {
+            0% { background-position: 0% 0%; }
+            50% { background-position: 100% 100%; }
+            100% { background-position: 0% 0%; }
+        }
+        .glass-panel:hover {
+            border-color: rgba(0, 243, 255, 0.7);
+            box-shadow: 0 25px 65px rgba(0, 0, 0, 0.85), 0 0 35px rgba(0, 243, 255, 0.3);
+            transform: translateY(-8px) scale(1.015);
+        }
+
         .sticky-insta-bar {
             position: fixed; top: 0; left: 0; width: 100%;
             background: rgba(3, 3, 5, 0.95); backdrop-filter: blur(12px);
@@ -67,7 +224,6 @@
             0% { border-bottom-color: rgba(0, 243, 255, 0.2); box-shadow: 0 0 10px rgba(0,243,255,0.05); }
             100% { border-bottom-color: rgba(121, 40, 202, 0.7); box-shadow: 0 0 20px rgba(121,40,202,0.2); }
         }
-
         .sticky-insta-bar a {
             color: var(--accent-primary); text-decoration: none;
             display: flex; align-items: center; gap: 6px; transition: var(--transition-smooth);
@@ -77,10 +233,9 @@
         .user-auth-status {
             display: flex; align-items: center; gap: 12px; font-family: var(--font-code); font-size: 0.85rem;
         }
-
         .auth-btn-small {
             background: rgba(0, 243, 255, 0.1); border: 1px solid var(--accent-primary);
-            color: var(--accent-primary); padding: 4px 12px; border-radius: 6px;
+            color: var(--accent-primary); padding: 4px 14px; border-radius: 6px;
             cursor: pointer; font-family: var(--font-code); font-size: 0.8rem; transition: var(--transition-smooth);
             animation: buttonGlow 3s infinite alternate;
         }
@@ -93,21 +248,18 @@
         .container {
             width: 100%; max-width: 1300px; margin: 0 auto; padding: 0 1.5rem; position: relative; z-index: 1;
         }
-
         .section-padding { padding: 110px 0; }
 
         .section-title {
             font-family: var(--font-display); font-size: clamp(2rem, 4vw, 2.8rem);
             text-align: center; margin-bottom: 2.5rem; position: relative;
             text-transform: uppercase; letter-spacing: 2px; color: var(--text-main);
-            text-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
-            animation: titleGlow 4s infinite alternate;
+            text-shadow: 0 0 15px rgba(0, 243, 255, 0.2); animation: titleGlow 4s infinite alternate;
         }
         @keyframes titleGlow {
             0% { text-shadow: 0 0 10px rgba(0, 243, 255, 0.2); }
             100% { text-shadow: 0 0 25px rgba(0, 243, 255, 0.7); }
         }
-
         .section-title::after {
             content: ''; position: absolute; bottom: -12px; left: 50%;
             transform: translateX(-50%); width: 60px; height: 3px;
@@ -120,18 +272,6 @@
             100% { width: 120px; }
         }
 
-        .glass-panel {
-            background: var(--glass-bg); backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px); border: 1px solid var(--glass-border);
-            border-radius: 20px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-            transition: var(--transition-smooth);
-        }
-        .glass-panel:hover {
-            border-color: rgba(0, 243, 255, 0.5);
-            box-shadow: 0 25px 55px rgba(0, 0, 0, 0.7), 0 0 25px rgba(0, 243, 255, 0.2);
-            transform: translateY(-3px);
-        }
-
         .highlight { color: var(--accent-primary); text-shadow: 0 0 12px rgba(0, 243, 255, 0.5); }
 
         .btn {
@@ -141,24 +281,25 @@
             border: none; border-radius: 10px; cursor: pointer; position: relative; overflow: hidden;
             transition: var(--transition-smooth); text-decoration: none; z-index: 1;
             box-shadow: 0 4px 20px rgba(0, 243, 255, 0.3); text-align: center;
-            animation: btnPulse 3s infinite alternate;
         }
-        @keyframes btnPulse {
-            0% { box-shadow: 0 4px 20px rgba(0, 243, 255, 0.3); }
-            100% { box-shadow: 0 6px 30px rgba(0, 243, 255, 0.7); }
+        .btn::after {
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.5s ease;
         }
-        .btn:hover { box-shadow: 0 8px 35px rgba(0, 243, 255, 0.9); transform: translateY(-3px) scale(1.02); color: #030305; }
+        .btn:hover::after { left: 100%; }
+        .btn:hover { box-shadow: 0 8px 35px rgba(0, 243, 255, 0.9); transform: translateY(-4px) scale(1.04); color: #030305; }
 
         .google-signup-btn {
-            display: inline-flex; align-items: center; gap: 12px; background: #fff; color: #333;
-            font-family: var(--font-display); font-weight: 700; padding: 0.95rem 2.2rem; border-radius: 10px;
-            border: none; cursor: pointer; transition: var(--transition-smooth);
+            display: inline-flex; align-items: center; justify-content: center; gap: 12px;
+            background: #ffffff; color: #1f2937; font-family: var(--font-display); font-weight: 700;
+            padding: 0.95rem 2.2rem; border-radius: 10px; border: 1px solid rgba(255,255,255,0.8);
+            cursor: pointer; transition: var(--transition-smooth);
             box-shadow: 0 4px 20px rgba(255, 255, 255, 0.25); font-size: 0.95rem; text-transform: uppercase;
         }
-        .google-signup-btn:hover { background: #f1f1f1; transform: translateY(-3px) scale(1.02); box-shadow: 0 6px 30px rgba(255, 255, 255, 0.5); }
-        .google-signup-btn svg { width: 22px; height: 22px; }
+        .google-signup-btn:hover { background: #f3f4f6; transform: translateY(-3px) scale(1.02); box-shadow: 0 6px 30px rgba(255, 255, 255, 0.5); }
+        .google-signup-btn svg { width: 22px; height: 22px; flex-shrink: 0; }
 
-        /* NAVIGATION BAR */
         header {
             position: fixed; top: 42px; left: 0; width: 100%; height: var(--nav-height);
             z-index: 1000; transition: var(--transition-smooth); border-bottom: 1px solid transparent;
@@ -180,7 +321,11 @@
         .logo-icon {
             width: 32px; height: 32px; fill: none; stroke: var(--accent-primary);
             stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
-            filter: drop-shadow(0 0 8px var(--accent-primary));
+            animation: logoSpin 14s linear infinite;
+        }
+        @keyframes logoSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         .nav-links { display: flex; list-style: none; gap: 1.8rem; align-items: center; }
@@ -200,33 +345,26 @@
             font-size: 2rem; cursor: pointer; z-index: 1001;
         }
 
-        /* REPAIRED & PROFESSIONAL PROFESSIONAL HERO OUTLINE CARD */
         #home {
             min-height: 100vh; display: flex; align-items: center; justify-content: center;
             position: relative; overflow: hidden; padding: calc(var(--nav-height) + 5rem) 0 5rem;
         }
 
         .hero-outline-card {
-            background: linear-gradient(135deg, rgba(18, 18, 28, 0.9), rgba(3, 3, 5, 0.96));
+            background: linear-gradient(135deg, rgba(18, 18, 28, 0.92), rgba(3, 3, 5, 0.97));
             border: 2px solid rgba(0, 243, 255, 0.4); border-radius: 30px;
             padding: clamp(2.5rem, 6vw, 4.5rem); max-width: 980px; width: 100%; margin: 0 auto;
             box-shadow: 0 30px 70px rgba(0, 0, 0, 0.85), 0 0 40px rgba(0, 243, 255, 0.2);
             position: relative; overflow: hidden; text-align: center;
-            animation: heroCardGlow 6s infinite alternate;
+            animation: heroCardFloat 7s ease-in-out infinite alternate, heroCardGlow 5s infinite alternate;
+        }
+        @keyframes heroCardFloat {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-12px); }
         }
         @keyframes heroCardGlow {
             0% { border-color: rgba(0, 243, 255, 0.4); box-shadow: 0 30px 70px rgba(0,0,0,0.85), 0 0 30px rgba(0,243,255,0.15); }
-            100% { border-color: rgba(121, 40, 202, 0.75); box-shadow: 0 30px 70px rgba(0,0,0,0.95), 0 0 50px rgba(121,40,202,0.35); }
-        }
-
-        .hero-outline-card::before {
-            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-            background: radial-gradient(circle, rgba(0,243,255,0.06) 0%, transparent 70%);
-            pointer-events: none; animation: rotateBackground 18s linear infinite;
-        }
-        @keyframes rotateBackground {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            100% { border-color: rgba(121, 40, 202, 0.75); box-shadow: 0 30px 70px rgba(0,0,0,0.95), 0 0 55px rgba(121,40,202,0.4); }
         }
 
         .hero-eyebrow {
@@ -234,24 +372,24 @@
             background: rgba(0, 243, 255, 0.12); border: 1px solid rgba(0, 243, 255, 0.35);
             padding: 8px 22px; border-radius: 30px; font-family: var(--font-code);
             font-size: 0.92rem; color: var(--accent-primary); margin-bottom: 1.8rem;
-            box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
             animation: badgeBounce 3s infinite ease-in-out;
         }
         @keyframes badgeBounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
+       0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
         }
 
         .hero-main-title {
             font-family: var(--font-display); font-size: clamp(2.6rem, 7vw, 5rem);
             font-weight: 900; line-height: 1.1; margin-bottom: 1.5rem; text-transform: uppercase;
-            background: linear-gradient(135deg, #ffffff 35%, var(--accent-primary) 100%);
+            background: linear-gradient(135deg, #ffffff 20%, var(--accent-primary) 60%, var(--accent-secondary) 100%);
+            background-size: 200% auto;
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            animation: titlePulse 5s infinite alternate;
+            animation: shineGradient 6s linear infinite;
         }
-        @keyframes titlePulse {
-            0% { filter: drop-shadow(0 0 10px rgba(255,255,255,0.2)); }
-            100% { filter: drop-shadow(0 0 25px rgba(0,243,255,0.6)); }
+        @keyframes shineGradient {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
         }
 
         .hero-subtitle-text {
@@ -263,7 +401,6 @@
             display: flex; gap: 1.2rem; justify-content: center; align-items: center; flex-wrap: wrap; position: relative; z-index: 2;
         }
 
-        /* CINEMATIC REEL MOCKUP SHOWCASE SECTION */
         #cinematic-showcase {
             min-height: 100vh; display: flex; align-items: center; justify-content: center;
             position: relative; overflow: hidden; padding: calc(var(--nav-height) + 3rem) 0 3rem;
@@ -284,7 +421,6 @@
         .reel-header-text {
             font-family: var(--font-display); font-size: clamp(1.1rem, 2.5vw, 1.35rem);
             text-align: center; color: #fff; margin-bottom: 20px; line-height: 1.4;
-            text-shadow: 0 0 12px rgba(255,255,255,0.35);
         }
 
         .mockup-device-frame {
@@ -316,18 +452,17 @@
             background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.2);
             color: #fff; padding: 12px 22px; border-radius: 30px; font-family: var(--font-display);
             font-size: 0.9rem; text-decoration: none; transition: var(--transition-smooth);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
             animation: ctaPulse 3s infinite alternate;
         }
         @keyframes ctaPulse {
             0% { box-shadow: 0 4px 15px rgba(0,0,0,0.4); }
             100% { box-shadow: 0 0 30px rgba(37, 211, 102, 0.6); border-color: rgba(37, 211, 102, 0.8); }
         }
-        .reel-cta-btn:hover { background: #25d366; color: #030305; border-color: #25d366; box-shadow: 0 0 35px #25d366; transform: scale(1.04); }
+        .reel-cta-btn:hover { background: #25d366; color: #030305; border-color: #25d366; transform: scale(1.04); }
         .reel-cta-btn svg { width: 20px; height: 20px; fill: #25d366; transition: fill 0.3s; }
         .reel-cta-btn:hover svg { fill: #030305; }
 
-        /* PRICING CALCULATOR */
+        /* CALCULATOR */
         .calculator-wrapper { max-width: 750px; margin: 0 auto; padding: clamp(1.5rem, 4vw, 3rem); }
         .calc-group { margin-bottom: 2rem; }
         .calc-label {
@@ -342,10 +477,10 @@
             padding: 1rem; text-align: center; cursor: pointer; transition: var(--transition-smooth);
             font-family: var(--font-body); font-size: 1rem; color: var(--text-muted);
         }
-        .calc-option-card:hover { border-color: var(--accent-primary); color: #fff; transform: translateY(-3px); }
+        .calc-option-card:hover { border-color: var(--accent-primary); color: #fff; transform: translateY(-4px) scale(1.03); }
         .calc-option-card.selected {
             background: rgba(0, 243, 255, 0.15); border-color: var(--accent-primary);
-            color: #fff; box-shadow: 0 0 25px rgba(0, 243, 255, 0.4); transform: translateY(-3px);
+            color: #fff; box-shadow: 0 0 25px rgba(0, 243, 255, 0.4); transform: translateY(-4px) scale(1.03);
         }
 
         .range-slider {
@@ -357,7 +492,7 @@
             background: var(--accent-primary); cursor: pointer; box-shadow: 0 0 20px var(--accent-primary);
             transition: transform 0.2s;
         }
-        .range-slider::-webkit-slider-thumb:hover { transform: scale(1.25); }
+        .range-slider::-webkit-slider-thumb:hover { transform: scale(1.3); }
 
         .price-display-box {
             background: rgba(0, 0, 0, 0.55); border: 2px dashed rgba(0, 243, 255, 0.45);
@@ -373,7 +508,7 @@
 
         .multiple-pages-action-box {
             display: none; text-align: center; background: rgba(121, 40, 202, 0.18);
-            border: 1px solid var(--accent-secondary); border-radius: 14px; padding: 1.5rem; margin-top: 1.5rem; animation: fadeIn 0.4s ease;
+            border: 1px solid var(--accent-secondary); border-radius: 14px; padding: 1.5rem; margin-top: 1.5rem;
         }
         .multiple-pages-action-box p { color: #fff; margin-bottom: 1rem; font-size: 1.05rem; }
 
@@ -381,13 +516,12 @@
             display: inline-flex; align-items: center; justify-content: center; gap: 10px;
             background: linear-gradient(135deg, var(--accent-secondary), #b537f2); color: #fff;
             padding: 0.9rem 2rem; border-radius: 8px; font-family: var(--font-display); font-weight: 700;
-            text-decoration: none; font-size: 1rem; box-shadow: 0 4px 20px rgba(121, 40, 202, 0.4); transition: var(--transition-smooth);
+            text-decoration: none; font-size: 1rem; box-shadow: 0 4px 20px rgba(121, 40, 202, 0.4);
+            transition: var(--transition-smooth);
         }
-        .direct-call-action-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(121, 40, 202, 0.6); color: #fff; }
+        .direct-call-action-btn:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 6px 25px rgba(121, 40, 202, 0.6); }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* MODAL OVERLAYS */
+        /* MODALS */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(3, 3, 5, 0.92); backdrop-filter: blur(15px); z-index: 3000;
@@ -409,32 +543,31 @@
 
         .modal-close-btn {
             position: absolute; top: 14px; right: 18px; background: transparent; border: none;
-            color: #fff; font-size: 1.8rem; cursor: pointer; transition: color 0.3s; line-height: 1;
+            color: #fff; font-size: 1.8rem; cursor: pointer; transition: color 0.3s;
         }
         .modal-close-btn:hover { color: var(--accent-primary); }
 
         .timer-badge {
             background: rgba(255, 0, 64, 0.12); border: 1px solid #ff0040; color: #ff0040;
             padding: 0.3rem 0.8rem; border-radius: 20px; font-family: var(--font-code); font-size: 0.85rem;
-            display: inline-block; margin-bottom: 1.2rem; box-shadow: 0 0 10px rgba(255, 0, 64, 0.2);
+            display: inline-block; margin-bottom: 1.2rem;
         }
-        .qr-box { background: #fff; padding: 12px; border-radius: 14px; display: inline-block; margin-bottom: 1.2rem; box-shadow: 0 0 25px rgba(255, 255, 255, 0.25); }
+        .qr-box { background: #fff; padding: 12px; border-radius: 14px; display: inline-block; margin-bottom: 1.2rem; }
         .qr-box img { width: 180px; height: 180px; display: block; max-width: 100%; }
 
         .payment-apps-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin-top: 1.2rem; }
         .pay-app-btn {
             padding: 0.75rem 0.8rem; background: rgba(255, 255, 255, 0.04); border: 1px solid var(--glass-border);
-            border-radius: 8px; color: #fff; font-family: var(--font-display); font-size: 0.85rem; cursor: pointer;
-            transition: var(--transition-smooth); text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 6px;
+            border-radius: 8px; color: #fff; font-family: var(--font-display); font-size: 0.85rem; text-decoration: none;
+            display: flex; align-items: center; justify-content: center; gap: 6px; transition: var(--transition-smooth);
         }
-        .pay-app-btn:hover { background: var(--accent-primary); color: #030305; border-color: var(--accent-primary); box-shadow: 0 0 20px var(--accent-primary); }
+        .pay-app-btn:hover { background: var(--accent-primary); color: #030305; box-shadow: 0 0 20px var(--accent-primary); }
 
-        /* ABOUT SECTION */
+        /* ABOUT */
         .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
         .about-graphic {
             width: 100%; height: auto; border-radius: 22px; background: rgba(0, 243, 255, 0.02);
-            border: 1px solid var(--glass-border); padding: 1.5rem; box-shadow: inset 0 0 40px rgba(0, 243, 255, 0.04);
-            position: relative; overflow: hidden;
+            border: 1px solid var(--glass-border); padding: 1.5rem;
         }
         .tech-hexagon {
             width: 220px; height: 220px; background: var(--glass-bg);
@@ -445,45 +578,37 @@
         }
         @keyframes hexPulse {
             0% { box-shadow: 0 0 20px rgba(0, 243, 255, 0.3); transform: scale(1); }
-            100% { box-shadow: 0 0 45px rgba(121, 40, 202, 0.7); transform: scale(1.04); }
+            100% { box-shadow: 0 0 45px rgba(121, 40, 202, 0.7); transform: scale(1.06); }
         }
         .tech-hexagon span { font-family: var(--font-display); font-size: 3.5rem; font-weight: 900; color: #fff; text-shadow: 0 0 15px var(--accent-secondary); }
-
         .about-content h3 { font-size: clamp(1.6rem, 3vw, 2.2rem); font-family: var(--font-display); margin-bottom: 1.2rem; color: var(--text-main); }
         .about-content p { font-size: 1.05rem; color: var(--text-muted); margin-bottom: 1.2rem; }
 
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1.2rem; margin-top: 2.5rem; }
-        .stat-box { padding: 1.2rem; text-align: center; transition: var(--transition-smooth); }
-        .stat-box:hover { transform: translateY(-8px) scale(1.03); border-color: var(--accent-primary); box-shadow: 0 12px 30px rgba(0, 243, 255, 0.25); }
-
-        .stat-number { font-family: var(--font-display); font-size: 2.2rem; font-weight: 700; color: var(--accent-primary); margin-bottom: 0.3rem; text-shadow: 0 0 12px rgba(0, 243, 255, 0.4); }
+        .stat-box { padding: 1.2rem; text-align: center; }
+        .stat-number { font-family: var(--font-display); font-size: 2.2rem; font-weight: 700; color: var(--accent-primary); margin-bottom: 0.3rem; }
         .stat-label { font-family: var(--font-code); font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
 
-        /* SERVICES SECTION */
+        /* SERVICES */
         .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin-top: 3rem; }
-        .service-card { padding: 2.5rem 1.8rem; display: flex; flex-direction: column; gap: 1.2rem; position: relative; overflow: hidden; transition: var(--transition-smooth); }
-        .service-card:hover {
-            border-color: rgba(0, 243, 255, 0.6); box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6), 0 0 25px rgba(0, 243, 255, 0.25); transform: translateY(-8px);
-        }
+        .service-card { padding: 2.5rem 1.8rem; display: flex; flex-direction: column; gap: 1.2rem; position: relative; overflow: hidden; }
         .service-icon {
             width: 55px; height: 55px; z-index: 1; background: rgba(0, 243, 255, 0.08);
             border-radius: 12px; display: flex; align-items: center; justify-content: center;
-            border: 1px solid rgba(0, 243, 255, 0.25); box-shadow: 0 0 12px rgba(0, 243, 255, 0.15);
-            animation: iconFloat 4s infinite ease-in-out alternate;
+            border: 1px solid rgba(0, 243, 255, 0.25); animation: iconFloat 4s infinite ease-in-out alternate;
         }
         @keyframes iconFloat {
             0% { transform: translateY(0); }
             100% { transform: translateY(-6px); }
         }
         .service-icon svg { width: 26px; height: 26px; fill: none; stroke: var(--accent-primary); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-
         .service-title { font-family: var(--font-display); font-size: 1.35rem; color: #fff; }
         .service-desc { color: var(--text-muted); font-size: 0.98rem; }
         .service-features { list-style: none; margin-top: 0.8rem; }
         .service-features li { font-family: var(--font-code); font-size: 0.88rem; color: #ccc; margin-bottom: 0.4rem; display: flex; align-items: center; gap: 8px; }
         .service-features li::before { content: '✓'; color: var(--accent-primary); font-weight: bold; }
 
-        /* PREMIUM CLUB SECTION */
+        /* SUBSCRIPTION */
         .premium-card {
             max-width: 550px; margin: 0 auto; padding: 3rem 2rem; border: 2px solid var(--accent-primary);
             background: linear-gradient(135deg, rgba(0, 243, 255, 0.05), rgba(121, 40, 202, 0.05));
@@ -494,20 +619,13 @@
             0% { box-shadow: 0 15px 35px rgba(0,0,0,0.4), 0 0 15px rgba(0,243,255,0.2); }
             100% { box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 35px rgba(121,40,202,0.4); }
         }
-        .premium-card::before {
-            content: 'VIP ELITE'; position: absolute; top: 20px; right: -35px;
-            background: var(--accent-primary); color: #030305; font-family: var(--font-display);
-            font-size: 0.65rem; font-weight: 900; padding: 5px 35px; transform: rotate(45deg); letter-spacing: 1px;
-        }
-        .premium-price { font-family: var(--font-display); font-size: 2.8rem; font-weight: 900; color: #fff; margin: 1.5rem 0; text-shadow: 0 0 20px rgba(0, 243, 255, 0.4); }
+        .premium-price { font-family: var(--font-display); font-size: 2.8rem; font-weight: 900; color: #fff; margin: 1.5rem 0; }
         .premium-price span { font-size: 1rem; color: var(--text-muted); font-weight: 400; }
-
         .premium-features { list-style: none; text-align: left; margin: 2rem 0; }
-        .premium-features li { margin-bottom: 1rem; color: var(--text-main); font-size: 1.05rem; display: flex; align-items: center; gap: 12px; transition: transform 0.2s; }
-        .premium-features li:hover { transform: translateX(5px); color: var(--accent-primary); }
+        .premium-features li { margin-bottom: 1rem; color: var(--text-main); font-size: 1.05rem; display: flex; align-items: center; gap: 12px; }
         .premium-features li::before { content: '👑'; }
 
-        /* FLOATING AI ASSISTANT WIDGET */
+        /* ADVANCED AI ASSISTANT WIDGET */
         #ai-fab-container { position: fixed; bottom: 25px; right: 25px; z-index: 10000; }
         .ai-fab-btn {
             width: 60px; height: 60px; background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
@@ -517,47 +635,53 @@
             animation: fabPulse 3s infinite alternate;
         }
         @keyframes fabPulse {
-            0% { transform: scale(1); box-shadow: 0 5px 25px rgba(0, 243, 255, 0.5); }
-            100% { transform: scale(1.08); box-shadow: 0 8px 35px rgba(121, 40, 202, 0.8); }
+            0% { transform: scale(1); }
+            100% { transform: scale(1.08); }
         }
         .ai-fab-btn:hover { transform: scale(1.15) rotate(10deg); }
 
         .ai-chat-popup {
-            position: fixed; bottom: 100px; right: 25px; width: 360px; height: 480px;
-            background: rgba(10, 10, 18, 0.96); backdrop-filter: blur(20px);
-            border: 1px solid var(--accent-primary); border-radius: 18px;
+            position: fixed; bottom: 95px; right: 25px; width: 380px; height: 530px;
+            background: rgba(10, 10, 18, 0.96); backdrop-filter: blur(25px);
+            border: 1px solid var(--accent-primary); border-radius: 20px;
             display: flex; flex-direction: column; overflow: hidden; z-index: 10000;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7), 0 0 25px rgba(0, 243, 255, 0.25);
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 243, 255, 0.3);
             transform: scale(0); opacity: 0; transform-origin: bottom right; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         .ai-chat-popup.active { transform: scale(1); opacity: 1; }
 
         .chat-header {
             background: linear-gradient(90deg, rgba(0, 243, 255, 0.15), rgba(121, 40, 202, 0.15));
-            padding: 12px 18px; border-bottom: 1px solid var(--glass-border);
+            padding: 14px 18px; border-bottom: 1px solid var(--glass-border);
             display: flex; justify-content: space-between; align-items: center;
         }
         .chat-header h4 { font-family: var(--font-display); font-size: 0.95rem; color: #fff; display: flex; align-items: center; gap: 8px; }
-        .chat-close-btn { background: transparent; border: none; color: #fff; font-size: 1.4rem; cursor: pointer; transition: color 0.3s; }
-        .chat-close-btn:hover { color: var(--accent-primary); }
+        .chat-status-dot { width: 8px; height: 8px; border-radius: 50%; background: #00f3ff; box-shadow: 0 0 8px #00f3ff; }
 
         .chat-messages { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; text-align: left; }
-        .message { padding: 10px 14px; border-radius: 10px; max-width: 85%; font-size: 0.92rem; line-height: 1.4; animation: msgAppear 0.3s ease; }
-        @keyframes msgAppear {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        .message { padding: 10px 14px; border-radius: 12px; max-width: 88%; font-size: 0.92rem; line-height: 1.45; }
+        .message.bot { background: rgba(0, 243, 255, 0.08); border: 1px solid rgba(0, 243, 255, 0.25); color: #fff; align-self: flex-start; }
+        .message.user { background: rgba(121, 40, 202, 0.25); border: 1px solid rgba(121, 40, 202, 0.5); color: #fff; align-self: flex-end; }
+        .typing-indicator { font-family: var(--font-code); font-size: 0.8rem; color: var(--accent-primary); opacity: 0.8; }
+
+        .chat-quick-actions {
+            display: flex; gap: 6px; padding: 6px 12px; overflow-x: auto; background: rgba(5, 5, 10, 0.7);
+            border-top: 1px solid rgba(255, 255, 255, 0.05); scrollbar-width: none;
         }
-        .message.bot { background: rgba(0, 243, 255, 0.08); border: 1px solid rgba(0, 243, 255, 0.2); color: #fff; align-self: flex-start; }
-        .message.user { background: rgba(121, 40, 202, 0.2); border: 1px solid rgba(121, 40, 202, 0.4); color: #fff; align-self: flex-end; }
+        .quick-action-chip {
+            background: rgba(0, 243, 255, 0.08); border: 1px solid rgba(0, 243, 255, 0.25);
+            color: var(--accent-primary); font-family: var(--font-code); font-size: 0.75rem;
+            padding: 4px 10px; border-radius: 14px; cursor: pointer; white-space: nowrap; transition: 0.2s;
+        }
+        .quick-action-chip:hover { background: var(--accent-primary); color: #000; }
 
         .chat-input-area { display: flex; padding: 12px; background: rgba(3, 3, 5, 0.95); border-top: 1px solid var(--glass-border); gap: 8px; }
         .chat-input-area input {
             flex: 1; padding: 10px 12px; background: rgba(0, 0, 0, 0.5); border: 1px solid var(--glass-border);
-            border-radius: 6px; color: #fff; font-family: var(--font-body); font-size: 0.95rem; outline: none;
+            border-radius: 8px; color: #fff; font-family: var(--font-body); font-size: 0.95rem; outline: none;
         }
-        .chat-input-area input:focus { border-color: var(--accent-primary); box-shadow: 0 0 10px rgba(0,243,255,0.3); }
+        .chat-input-area input:focus { border-color: var(--accent-primary); }
 
-        /* DIRECT WHATSAPP FLOATING BUTTON */
         #whatsapp-fab {
             position: fixed; bottom: 25px; left: 25px; z-index: 10000;
             width: 55px; height: 55px; background: #25d366; border-radius: 50%;
@@ -566,13 +690,12 @@
             animation: waPulse 3s infinite alternate;
         }
         @keyframes waPulse {
-            0% { transform: scale(1); box-shadow: 0 4px 20px rgba(37, 211, 102, 0.5); }
+            0% { transform: scale(1); }
             100% { transform: scale(1.08); box-shadow: 0 6px 30px rgba(37, 211, 102, 0.8); }
         }
-        #whatsapp-fab:hover { transform: scale(1.15) rotate(-10deg); box-shadow: 0 8px 35px rgba(37, 211, 102, 0.9); }
+        #whatsapp-fab:hover { transform: scale(1.15) rotate(-10deg); }
         #whatsapp-fab svg { width: 30px; height: 30px; fill: #fff; }
 
-        /* STICKY MASCOT */
         #sticky-mascot {
             position: fixed; bottom: 95px; right: 25px; z-index: 9999;
             display: flex; flex-direction: column; align-items: flex-end; pointer-events: none;
@@ -581,22 +704,18 @@
             background: var(--glass-bg); border: 1px solid var(--accent-primary); backdrop-filter: blur(10px);
             color: #fff; padding: 10px 15px; border-radius: 12px; font-family: var(--font-display);
             font-size: 0.75rem; max-width: 240px; margin-bottom: 8px; box-shadow: 0 5px 20px rgba(0, 243, 255, 0.3);
-            animation: floatBubble 3s ease-in-out infinite; pointer-events: auto; text-align: center; cursor: pointer;
-            transition: transform 0.2s, background 0.2s;
+            pointer-events: auto; text-align: center; cursor: pointer;
         }
-        .mascot-speech-bubble:hover { background: rgba(0, 243, 255, 0.15); transform: scale(1.03); }
         .mascot-avatar {
             width: 55px; height: 55px; background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
             border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;
-            box-shadow: 0 0 20px rgba(0, 243, 255, 0.5); pointer-events: auto; cursor: pointer;
-            animation: mascotJump 2s infinite ease-in-out, mascotSmile 4s infinite alternate;
+            pointer-events: auto; cursor: pointer; animation: mascotJump 2s infinite ease-in-out;
+        }
+        @keyframes mascotJump {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
         }
 
-        @keyframes mascotJump { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-        @keyframes mascotSmile { 0% { filter: hue-rotate(0deg); } 100% { filter: hue-rotate(45deg); } }
-        @keyframes floatBubble { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
-
-        /* POLICY / FEEDBACK / CONTACT STYLES */
         .policy-box {
             max-width: 850px; margin: 0 auto; padding: 2.5rem;
             background: rgba(255, 70, 70, 0.04); border: 1px solid rgba(255, 70, 70, 0.25); text-align: left;
@@ -613,39 +732,34 @@
         .contact-info-panel p { color: var(--text-muted); margin-bottom: 1.5rem; }
 
         .contact-method { display: flex; align-items: flex-start; gap: 1.2rem; margin-bottom: 1.5rem; transition: transform 0.2s; }
-        .contact-method:hover { transform: translateX(5px); }
+        .contact-method:hover { transform: translateX(6px); }
         .contact-icon {
             width: 45px; height: 45px; background: rgba(121, 40, 202, 0.15); border-radius: 50%;
-            display: flex; align-items: center; justify-content: center; border: 1px solid rgba(121, 40, 202, 0.3);
-            flex-shrink: 0; box-shadow: 0 0 12px rgba(121, 40, 202, 0.2);
+            display: flex; align-items: center; justify-content: center; border: 1px solid rgba(121, 40, 202, 0.3); flex-shrink: 0;
         }
         .contact-icon svg { width: 22px; height: 22px; fill: none; stroke: #b537f2; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-        .contact-details h4 { font-family: var(--font-code); color: #fff; font-size: 0.95rem; margin-bottom: 0.2rem; letter-spacing: 1px; }
-        .contact-details a { color: var(--accent-primary); text-decoration: none; font-size: 1.05rem; font-weight: 600; font-family: var(--font-display); transition: var(--transition-smooth); word-break: break-all; }
-        .contact-details a:hover { color: #fff; text-shadow: 0 0 8px var(--accent-primary); }
+        .contact-details h4 { font-family: var(--font-code); color: #fff; font-size: 0.95rem; margin-bottom: 0.2rem; }
+        .contact-details a { color: var(--accent-primary); text-decoration: none; font-size: 1.05rem; font-weight: 600; font-family: var(--font-display); }
 
         .form-group { margin-bottom: 1.2rem; }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
         .form-control {
             width: 100%; padding: 0.9rem 1.2rem; background: rgba(0, 0, 0, 0.4);
             border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: #fff;
-            font-family: var(--font-body); font-size: 1rem; transition: var(--transition-smooth); outline: none;
+            font-family: var(--font-body); font-size: 1rem; outline: none; transition: var(--transition-smooth);
         }
-        .form-control:focus { border-color: var(--accent-primary); box-shadow: 0 0 15px rgba(0, 243, 255, 0.25); background: rgba(0, 243, 255, 0.04); }
+        .form-control:focus { border-color: var(--accent-primary); box-shadow: 0 0 15px rgba(0, 243, 255, 0.25); }
         .form-control::placeholder { color: rgba(255, 255, 255, 0.3); font-family: var(--font-code); }
         textarea.form-control { resize: vertical; min-height: 130px; }
 
         .contact-strip {
             background: linear-gradient(90deg, rgba(3,3,5,0.95), rgba(13,13,21,0.95));
             border-top: 1px solid rgba(0, 243, 255, 0.25); border-bottom: 1px solid rgba(0, 243, 255, 0.25);
-            padding: 0.9rem 1rem; text-align: center; box-shadow: 0 0 20px rgba(0, 243, 255, 0.08); margin: 1.5rem 0;
+            padding: 0.9rem 1rem; text-align: center; margin: 1.5rem 0;
             display: flex; justify-content: center; align-items: center; gap: 1.5rem; flex-wrap: wrap;
         }
-        .contact-strip p {
-            font-family: var(--font-display); font-size: clamp(0.95rem, 2vw, 1.1rem); color: #fff; margin: 0;
-            display: flex; align-items: center; gap: 12px; flex-wrap: wrap; justify-content: center;
-        }
-        .contact-strip .big-number { font-size: clamp(1.3rem, 2.5vw, 1.6rem); color: var(--accent-primary); font-weight: 900; letter-spacing: 1.5px; text-shadow: 0 0 10px rgba(0, 243, 255, 0.5); }
+        .contact-strip p { font-family: var(--font-display); font-size: clamp(0.95rem, 2vw, 1.1rem); color: #fff; margin: 0; }
+        .contact-strip .big-number { font-size: clamp(1.3rem, 2.5vw, 1.6rem); color: var(--accent-primary); font-weight: 900; }
 
         footer { background: #010103; padding: 2.5rem 0; border-top: 1px solid var(--glass-border); text-align: center; position: relative; z-index: 10; }
         .social-links { display: flex; justify-content: center; gap: 1.2rem; margin-bottom: 1.5rem; }
@@ -653,11 +767,9 @@
             width: 42px; height: 42px; border-radius: 50%; background: var(--glass-bg); border: 1px solid var(--glass-border);
             display: flex; align-items: center; justify-content: center; transition: var(--transition-smooth); color: #fff;
         }
-        .social-link:hover { background: var(--accent-primary); border-color: var(--accent-primary); color: #030305; transform: translateY(-3px) scale(1.1); box-shadow: 0 5px 15px rgba(0, 243, 255, 0.4); }
+        .social-link:hover { background: var(--accent-primary); color: #030305; transform: scale(1.15) rotate(5deg); }
         .social-link svg { width: 18px; height: 18px; fill: currentColor; }
-
-        .copyright { color: var(--text-muted); font-family: var(--font-code); font-size: 0.85rem; padding: 0 1rem; }
-        .copyright span { color: var(--accent-primary); }
+        .copyright { color: var(--text-muted); font-family: var(--font-code); font-size: 0.85rem; }
 
         @media screen and (max-width: 992px) {
             .about-grid, .contact-wrapper { grid-template-columns: 1fr; gap: 2.5rem; }
@@ -665,6 +777,11 @@
         }
 
         @media screen and (max-width: 768px) {
+            .intro-top-nav { padding: 20px; }
+            .intro-nav-links { display: none; }
+            .cinematic-sub-left, .cinematic-sub-right { bottom: 25px; font-size: 9px; }
+            .cinematic-sub-left { left: 20px; }
+            .cinematic-sub-right { right: 20px; }
             .nav-links {
                 position: fixed; top: calc(var(--nav-height) + 42px); left: -100%; width: 100%;
                 height: calc(100vh - var(--nav-height) - 42px); background: rgba(3, 3, 5, 0.98); backdrop-filter: blur(20px);
@@ -676,14 +793,90 @@
             .hero-action-buttons .btn, .hero-action-buttons button { width: 100%; }
             .form-row { grid-template-columns: 1fr; }
             .calculator-wrapper, .contact-info-panel, .order-form-panel, .feedback-wrapper, .policy-box { padding: 1.5rem; }
-            .ai-chat-popup { width: 90vw; right: 5vw; height: 420px; }
+            .ai-chat-popup { width: 90vw; right: 5vw; height: 460px; }
+            #cursor-glow { display: none; }
         }
 
-        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
-        .reveal.active { opacity: 1; transform: translateY(0); }
+        /* HARDWARE ACCELERATED STAGGERED SCROLL REVEAL */
+        .reveal {
+            opacity: 0; transform: translateY(40px) scale(0.97);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, transform;
+        }
+        .reveal.active { opacity: 1; transform: translateY(0) scale(1); }
     </style>
 </head>
 <body>
+
+    <!-- SCROLL TRACKER LINE -->
+    <div id="scroll-tracker"></div>
+
+    <!-- CURSOR FOLLOW GLOW -->
+    <div id="cursor-glow"></div>
+
+    <!-- =====================================================================
+         CINEMATIC INTRO OVERLAY
+    ====================================================================== -->
+    <div id="cinematic-intro">
+        <canvas id="intro-webgl-canvas"></canvas>
+        <div class="cinematic-vignette"></div>
+
+        <div class="intro-top-nav">
+            <div class="intro-nav-links">
+                <span>HOME / 01</span>
+                <span>SHOWREEL</span>
+                <span>CREATOR STUDIO</span>
+            </div>
+            <div style="display: flex; gap: 12px; align-items: center;">
+                <button class="intro-sound-btn" id="introSoundToggle">Sound [FX]</button>
+                <button class="skip-intro-btn" onclick="exitCinematicIntro()">Enter Site &rarr;</button>
+            </div>
+        </div>
+
+        <!-- Stage 1: Creator is Coming -->
+        <div class="stage-layer active" id="stage-1">
+            <h1 class="cinematic-hero-title">
+                <span>CREATOR</span>
+                <span style="opacity:0.3; font-style:italic;">IS</span>
+                <span style="color:#00f3ff;">COMING</span>
+            </h1>
+            <div class="cinematic-sub-left">
+                WE TRANSCEND<br>DIMENSIONS
+            </div>
+            <div class="cinematic-sub-right">
+                BUILT FOR<br>THE FUTURE
+            </div>
+        </div>
+
+        <!-- Stage 2: Violet Powder Bloom (+150 Deployed) -->
+        <div class="stage-layer" id="stage-2">
+            <div class="smoke-burst-card">
+                <p class="smoke-quote">
+                    CREATOR ABHAYRAJ IS A DIGITAL ARCHITECTURE STUDIO AT THE INTERSECTION OF CODE, CINEMATICS AND LUXURY BRANDS.
+                </p>
+                <div class="counter-pill">
+                    <span style="color:var(--accent-primary); font-weight:bold;">+150</span>
+                    <span style="opacity:0.4;">|</span>
+                    <span>DEPLOYED IN PROD</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stage 3: Cyber Artifact & Entrance -->
+        <div class="stage-layer" id="stage-3">
+            <div style="text-align:center;">
+                <div style="font-family: var(--font-code); color: var(--accent-primary); letter-spacing: 4px; font-size: 0.85rem; margin-bottom: 12px;">© ARCHITECTURE 2026</div>
+                <h2 style="font-family: var(--font-cinematic); font-size: clamp(2.4rem, 6.5vw, 5.5rem); letter-spacing: 0.18em; text-transform: uppercase; color: #fff; margin-bottom: 20px;">CREATOR ABHAYRAJ</h2>
+                <button class="enter-portal-btn" onclick="exitCinematicIntro()">EXPLORE ECOSYSTEM</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- =====================================================================
+         MAIN SITE THREE.JS BACKGROUND CANVAS
+    ====================================================================== -->
+    <canvas id="main-site-canvas"></canvas>
+    <div class="noise-overlay"></div>
 
     <!-- STICKY INSTAGRAM BAR & SIGN-UP STATUS -->
     <div class="sticky-insta-bar">
@@ -695,10 +888,6 @@
             <button class="auth-btn-small" id="authActionButton" onclick="handleGoogleSignIn()">Sign In with Google</button>
         </div>
     </div>
-
-    <!-- BACKGROUND ENGINE -->
-    <canvas id="particle-canvas"></canvas>
-    <div class="noise-overlay"></div>
 
     <!-- HEADER / NAVIGATION -->
     <header id="header">
@@ -727,7 +916,6 @@
     </header>
 
     <main>
-        <!-- REPAIRED & PROFESSIONAL HERO SECTION -->
         <section id="home">
             <div class="container">
                 <div class="hero-outline-card reveal active">
@@ -740,7 +928,7 @@
                         <a href="#calculator" class="btn">Instant Website Calculator</a>
                         <button class="google-signup-btn" onclick="handleGoogleSignIn()">
                             <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.11-6.72-4.95H1.2v3.14C3.18 21.35 7.23 24 12 24z"/><path fill="#FBBC05" d="M5.28 14.25c-.25-.72-.38-1.49-.38-2.25s.13-1.53.38-2.25V6.61H1.2C.44 8.15 0 9.88 0 12s.44 3.85 1.2 5.39l4.08-3.14z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.23 0 3.18 2.65 1.2 6.61l4.08 3.14c.95-2.84 3.6-4.95 6.72-4.95z"/></svg>
-                            Sign In with Google
+                            <span id="heroGoogleBtnText">Sign In with Google</span>
                         </button>
                     </div>
                 </div>
@@ -786,11 +974,10 @@
             <p>Ready to build your digital presence? Call directly: <span class="big-number">9306882926</span></p>
         </div>
 
-        <!-- INSTANT WEBSITE PRICING CALCULATOR -->
+        <!-- PRICING CALCULATOR -->
         <section id="calculator" class="section-padding">
             <div class="container">
                 <h2 class="section-title reveal">Instant Website Calculator</h2>
-                
                 <div class="calculator-wrapper glass-panel reveal">
                     <div class="calc-group">
                         <div class="calc-label">Select Website Type:</div>
@@ -836,7 +1023,6 @@
         <section id="about" class="section-padding">
             <div class="container">
                 <h2 class="section-title reveal">About Us</h2>
-                
                 <div class="about-grid">
                     <div class="about-image-wrapper reveal">
                         <div class="about-graphic">
@@ -855,7 +1041,7 @@
 
                 <div class="stats-grid reveal">
                     <div class="stat-box glass-panel">
-                        <div class="stat-number">150+</div>
+                        <div class="stat-number">+150</div>
                         <div class="stat-label">Projects Deployed</div>
                     </div>
                     <div class="stat-box glass-panel">
@@ -870,16 +1056,10 @@
             </div>
         </section>
 
-        <!-- PERSISTENT CONTACT STRIP -->
-        <div class="contact-strip">
-            <p>Get in touch for custom solutions: <span class="big-number">9306882926</span></p>
-        </div>
-
         <!-- SERVICES SECTION -->
         <section id="services" class="section-padding">
             <div class="container">
                 <h2 class="section-title reveal">Professional Services</h2>
-                
                 <div class="services-grid">
                     <div class="service-card glass-panel reveal">
                         <div class="service-icon">
@@ -936,7 +1116,7 @@
             </div>
         </section>
 
-        <!-- SUBSCRIPTION PAGE SECTION -->
+        <!-- SUBSCRIPTION SECTION -->
         <section id="premium" class="section-padding">
             <div class="container">
                 <h2 class="section-title reveal">Buy Subscription</h2>
@@ -973,7 +1153,7 @@
             </div>
         </section>
 
-        <!-- CANCELLATION POLICY SECTION -->
+        <!-- CANCELLATION POLICY -->
         <section id="policy" class="section-padding" style="padding-top: 0;">
             <div class="container">
                 <div class="policy-box glass-panel reveal">
@@ -984,7 +1164,7 @@
             </div>
         </section>
 
-        <!-- PERSISTENT CONTACT STRIP -->
+        <!-- CONTACT STRIP -->
         <div class="contact-strip">
             <p>Let's discuss your project: <span class="big-number">9306882926</span></p>
         </div>
@@ -993,7 +1173,6 @@
         <section id="contact" class="section-padding">
             <div class="container">
                 <h2 class="section-title reveal">Get in Touch</h2>
-                
                 <div class="contact-wrapper">
                     <div class="contact-info-panel glass-panel reveal">
                         <h3>Contact Information</h3>
@@ -1064,24 +1243,30 @@
         </section>
     </main>
 
-    <!-- FLOATING DIRECT WHATSAPP BUTTON -->
+    <!-- FLOATING WHATSAPP -->
     <a href="https://wa.me/919306882926?text=Hi%20Abhayraj,%20I%20want%20to%20build%20a%20website!" target="_blank" id="whatsapp-fab" aria-label="Chat on WhatsApp">
         <svg viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.124-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
     </a>
 
-    <!-- FLOATING AI ASSISTANT WIDGET -->
+    <!-- ADVANCED AI ASSISTANT -->
     <div id="ai-fab-container">
         <div class="ai-fab-btn" onclick="toggleAIChat()" title="Chat with AI Assistant">🤖</div>
         <div class="ai-chat-popup" id="aiChatPopup">
             <div class="chat-header">
-                <h4>🤖 Creator Abhayraj AI</h4>
-                <button class="chat-close-btn" onclick="toggleAIChat()">&times;</button>
+                <h4><span class="chat-status-dot"></span> Abhayraj Neural AI 2.0</h4>
+                <button class="modal-close-btn" style="position:static; font-size:1.4rem;" onclick="toggleAIChat()">&times;</button>
             </div>
             <div class="chat-messages" id="chatMessages">
-                <div class="message bot">Hello! I am your AI assistant for Creator Abhayraj. Ask me anything about our cinematic builds, pricing, or custom domains!</div>
+                <div class="message bot">Greetings! I am Creator Abhayraj's direct architectural AI. How can I help you dominate your digital space today?</div>
+            </div>
+            <div class="chat-quick-actions">
+                <button class="quick-action-chip" onclick="askQuickPrompt('Pricing details')">💰 Pricing</button>
+                <button class="quick-action-chip" onclick="askQuickPrompt('Build timeline')">⏱️ 7-Day Timeline</button>
+                <button class="quick-action-chip" onclick="askQuickPrompt('Domain inclusion')">🌐 Custom Domain</button>
+                <button class="quick-action-chip" onclick="askQuickPrompt('Call developer')">📞 Direct Call</button>
             </div>
             <div class="chat-input-area">
-                <input type="text" id="userInput" placeholder="Ask a question..." onkeypress="handleKeyPress(event)">
+                <input type="text" id="userInput" placeholder="Ask anything about web builds..." onkeypress="handleKeyPress(event)">
                 <button class="btn" style="padding: 8px 14px; font-size: 0.85rem;" onclick="sendMessage()">Send</button>
             </div>
         </div>
@@ -1122,7 +1307,7 @@
         </div>
     </div>
 
-    <!-- SIGN UP FIRST / NOTIFICATION POPUP MODAL -->
+    <!-- SUBSCRIPTION MODAL -->
     <div class="modal-overlay" id="subModalOverlay">
         <div class="modal-content">
             <button class="modal-close-btn" onclick="closeSubscriptionFlow()">&times;</button>
@@ -1144,11 +1329,402 @@
         </div>
     </div>
 
-    <!-- JAVASCRIPT ENGINE WITH FIREBASE & ADMIN WHATSAPP NOTIFICATION -->
+    <!-- =====================================================================
+         1. CINEMATIC INTRO THREE.JS ENGINE
+    ====================================================================== -->
+    <script>
+        let audioCtx = null;
+        let soundEnabled = true;
+
+        function playCinematicWhoosh() {
+            if (!soundEnabled) return;
+            try {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                const filter = audioCtx.createBiquadFilter();
+
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(55, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(380, audioCtx.currentTime + 1.2);
+
+                filter.type = 'lowpass';
+                filter.frequency.setValueAtTime(150, audioCtx.currentTime);
+                filter.frequency.exponentialRampToValueAtTime(2800, audioCtx.currentTime + 1.2);
+
+                gain.gain.setValueAtTime(0.01, audioCtx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.25, audioCtx.currentTime + 0.3);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.5);
+
+                osc.connect(filter);
+                filter.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                osc.start();
+                osc.stop(audioCtx.currentTime + 1.6);
+            } catch(e) { console.log(e); }
+        }
+
+        document.getElementById('introSoundToggle').addEventListener('click', () => {
+            soundEnabled = !soundEnabled;
+            document.getElementById('introSoundToggle').innerText = soundEnabled ? "Sound [ON]" : "Sound [OFF]";
+            if(soundEnabled) playCinematicWhoosh();
+        });
+
+        const introCanvas = document.getElementById('intro-webgl-canvas');
+        const isMobileDevice = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || window.innerWidth < 768;
+        const introRenderer = new THREE.WebGLRenderer({ canvas: introCanvas, antialias: !isMobileDevice, alpha: true, powerPreference: 'high-performance' });
+        introRenderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobileDevice ? 1.2 : 2));
+        introRenderer.setSize(window.innerWidth, window.innerHeight);
+
+        const introScene = new THREE.Scene();
+        const introCamera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+        introCamera.position.z = 6;
+
+        const introLight1 = new THREE.PointLight(0xa855f7, 5, 25);
+        introLight1.position.set(4, 3, 5);
+        introScene.add(introLight1);
+
+        const introLight2 = new THREE.PointLight(0x00f3ff, 4, 25);
+        introLight2.position.set(-4, -3, 3);
+        introScene.add(introLight2);
+
+        const introFlowerGroup = new THREE.Group();
+        introScene.add(introFlowerGroup);
+
+        const introPetalGeo = new THREE.TorusKnotGeometry(1.3, 0.42, isMobileDevice ? 80 : 130, 24, 3, 5);
+        const introPetalMat = new THREE.MeshPhysicalMaterial({
+            color: 0x070312,
+            metalness: 0.95,
+            roughness: 0.15,
+            clearcoat: 1.0,
+            clearcoatRoughness: 0.08,
+            emissive: 0x3b0764,
+            emissiveIntensity: 0.55
+        });
+        const introFlowerMesh = new THREE.Mesh(introPetalGeo, introPetalMat);
+        introFlowerGroup.add(introFlowerMesh);
+
+        const introCoreGeo = new THREE.IcosahedronGeometry(0.55, 2);
+        const introCoreMat = new THREE.MeshStandardMaterial({
+            color: 0x00f3ff,
+            emissive: 0x9333ea,
+            emissiveIntensity: 2.2,
+            roughness: 0.1,
+            metalness: 0.9
+        });
+        const introCoreMesh = new THREE.Mesh(introCoreGeo, introCoreMat);
+        introFlowerGroup.add(introCoreMesh);
+
+        const powderCount = isMobileDevice ? 900 : 1800;
+        const powderGeo = new THREE.BufferGeometry();
+        const powderPositions = new Float32Array(powderCount * 3);
+        const powderVelocities = [];
+
+        for (let i = 0; i < powderCount * 3; i += 3) {
+            powderPositions[i] = (Math.random() - 0.5) * 1.6;
+            powderPositions[i + 1] = (Math.random() - 0.5) * 1.6;
+            powderPositions[i + 2] = (Math.random() - 0.5) * 1.6;
+
+            powderVelocities.push({
+                x: (Math.random() - 0.5) * 0.065,
+                y: (Math.random() - 0.5) * 0.065,
+                z: (Math.random() - 0.5) * 0.065
+            });
+        }
+        powderGeo.setAttribute('position', new THREE.BufferAttribute(powderPositions, 3));
+
+        const powderMat = new THREE.PointsMaterial({
+            size: 0.05,
+            color: 0xc084fc,
+            transparent: true,
+            opacity: 0.85,
+            blending: THREE.AdditiveBlending
+        });
+        const introPowderCloud = new THREE.Points(powderGeo, powderMat);
+        introScene.add(introPowderCloud);
+
+        let introClock = new THREE.Clock();
+        let introStage = 1;
+
+        function animateIntro() {
+            if (document.getElementById('cinematic-intro').style.display === 'none') return;
+            requestAnimationFrame(animateIntro);
+            const time = introClock.getElapsedTime();
+
+            introFlowerGroup.rotation.x = Math.sin(time * 0.5) * 0.35;
+            introFlowerGroup.rotation.y += 0.015;
+            introFlowerGroup.rotation.z = Math.cos(time * 0.4) * 0.25;
+
+            introCoreMesh.rotation.y -= 0.03;
+
+            if (introStage === 2) {
+                const pos = powderGeo.attributes.position.array;
+                for (let i = 0; i < powderCount; i++) {
+                    pos[i * 3] += powderVelocities[i].x * 2.8;
+                    pos[i * 3 + 1] += powderVelocities[i].y * 2.8;
+                    pos[i * 3 + 2] += powderVelocities[i].z * 2.8;
+                }
+                powderGeo.attributes.position.needsUpdate = true;
+                powderMat.opacity = Math.max(0.1, powderMat.opacity - 0.003);
+                introFlowerGroup.scale.lerp(new THREE.Vector3(1.8, 1.8, 1.8), 0.05);
+            } else if (introStage === 3) {
+                introFlowerGroup.rotation.y += 0.045;
+                introFlowerGroup.scale.lerp(new THREE.Vector3(1.2, 1.2, 1.2), 0.06);
+            }
+
+            introRenderer.render(introScene, introCamera);
+        }
+        animateIntro();
+
+        const s1 = document.getElementById('stage-1');
+        const s2 = document.getElementById('stage-2');
+        const s3 = document.getElementById('stage-3');
+
+        setTimeout(() => {
+            if (document.getElementById('cinematic-intro').classList.contains('hide')) return;
+            introStage = 2;
+            playCinematicWhoosh();
+            s1.classList.remove('active');
+            s2.classList.add('active');
+        }, 3000);
+
+        setTimeout(() => {
+            if (document.getElementById('cinematic-intro').classList.contains('hide')) return;
+            introStage = 3;
+            playCinematicWhoosh();
+            s2.classList.remove('active');
+            s3.classList.add('active');
+        }, 6200);
+
+        setTimeout(() => { exitCinematicIntro(); }, 10000);
+
+        function exitCinematicIntro() {
+            const intro = document.getElementById('cinematic-intro');
+            if (!intro.classList.contains('hide')) {
+                intro.classList.add('hide');
+                setTimeout(() => { intro.style.display = 'none'; }, 1100);
+            }
+        }
+        window.exitCinematicIntro = exitCinematicIntro;
+    </script>
+
+    <!-- =====================================================================
+         2. HIGH-PERFORMANCE MULTI-LAYER THREE.JS 3D ENGINE (OPTIMIZED 60FPS)
+    ====================================================================== -->
+    <script>
+        const siteCanvas = document.getElementById('main-site-canvas');
+        const siteRenderer = new THREE.WebGLRenderer({ 
+            canvas: siteCanvas, 
+            antialias: !isMobileDevice, 
+            alpha: true,
+            powerPreference: 'high-performance' 
+        });
+        siteRenderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobileDevice ? 1.0 : 1.5));
+        siteRenderer.setSize(window.innerWidth, window.innerHeight);
+
+        const siteScene = new THREE.Scene();
+        const siteCamera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+        siteCamera.position.z = 24;
+
+        // Ambient cyber lighting
+        const siteLightA = new THREE.AmbientLight(0x0a0518, 2.5);
+        siteScene.add(siteLightA);
+
+        const sitePointLight = new THREE.PointLight(0x00f3ff, 3.5, 60);
+        sitePointLight.position.set(12, 18, 15);
+        siteScene.add(sitePointLight);
+
+        const sitePurpleLight = new THREE.PointLight(0x7928ca, 4.5, 70);
+        sitePurpleLight.position.set(-15, -12, 12);
+        siteScene.add(sitePurpleLight);
+
+        const cursorPointLight = new THREE.PointLight(0x00f3ff, 2.5, 30);
+        siteScene.add(cursorPointLight);
+
+        // Central Morphing Cosmic Lattice
+        const morphGroup = new THREE.Group();
+        siteScene.add(morphGroup);
+
+        const centralGeo = new THREE.IcosahedronGeometry(7.5, isMobileDevice ? 1 : 2);
+        const centralMat = new THREE.MeshStandardMaterial({
+            color: 0x050114,
+            emissive: 0x581c87,
+            emissiveIntensity: 0.6,
+            metalness: 0.9,
+            roughness: 0.2,
+            wireframe: true
+        });
+        const centralLattice = new THREE.Mesh(centralGeo, centralMat);
+        morphGroup.add(centralLattice);
+
+        // Outer Cyber Torus Ring
+        const cyberRingGeo = new THREE.TorusGeometry(10.5, 0.25, 16, isMobileDevice ? 50 : 90);
+        const cyberRingMat = new THREE.MeshStandardMaterial({
+            color: 0x00f3ff,
+            emissive: 0x00bcd4,
+            emissiveIntensity: 0.8,
+            metalness: 0.8,
+            roughness: 0.2
+        });
+        const cyberRing = new THREE.Mesh(cyberRingGeo, cyberRingMat);
+        morphGroup.add(cyberRing);
+
+        // Dynamic Floating Geometry Shards (Petals)
+        const floatingPetals = [];
+        const petalMeshGeo = new THREE.ConeGeometry(0.5, 1.8, 4);
+        const petalMat = new THREE.MeshStandardMaterial({
+            color: 0x0c0617,
+            emissive: 0x7928ca,
+            emissiveIntensity: 0.5,
+            metalness: 0.9,
+            roughness: 0.2
+        });
+
+        const petalCount = isMobileDevice ? 14 : 26;
+        for(let i = 0; i < petalCount; i++) {
+            const petal = new THREE.Mesh(petalMeshGeo, petalMat);
+            petal.position.set(
+                (Math.random() - 0.5) * 35,
+                (Math.random() - 0.5) * 35,
+                (Math.random() - 0.5) * 20
+            );
+            petal.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, 0);
+            petal.userData = {
+                rotSpeedX: (Math.random() - 0.5) * 0.02,
+                rotSpeedY: (Math.random() - 0.5) * 0.02,
+                floatSpeed: Math.random() * 0.01 + 0.005,
+                seed: Math.random() * 10
+            };
+            siteScene.add(petal);
+            floatingPetals.push(petal);
+        }
+
+        // Animated Interactive Wavefield / Nebula Star Array
+        const starCount = isMobileDevice ? 320 : 650;
+        const starGeo = new THREE.BufferGeometry();
+        const starPos = new Float32Array(starCount * 3);
+        const initialY = new Float32Array(starCount);
+
+        for (let i = 0; i < starCount; i++) {
+            const idx = i * 3;
+            starPos[idx] = (Math.random() - 0.5) * 80;
+            starPos[idx + 1] = (Math.random() - 0.5) * 80;
+            starPos[idx + 2] = (Math.random() - 0.5) * 50;
+            initialY[i] = starPos[idx + 1];
+        }
+        starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
+
+        const starMat = new THREE.PointsMaterial({
+            size: isMobileDevice ? 0.28 : 0.22,
+            color: 0x00f3ff,
+            transparent: true,
+            opacity: 0.75,
+            blending: THREE.AdditiveBlending
+        });
+        const starMesh = new THREE.Points(starGeo, starMat);
+        siteScene.add(starMesh);
+
+        // Hardware-Optimized Mouse & Scroll Event Handlers
+        let targetMouseX = 0, targetMouseY = 0;
+        let mouseX = 0, mouseY = 0;
+        let scrollY = 0;
+        const cursorGlow = document.getElementById('cursor-glow');
+        const scrollTracker = document.getElementById('scroll-tracker');
+
+        if (!isMobileDevice) {
+            window.addEventListener('mousemove', (e) => {
+                targetMouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+                targetMouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+                cursorGlow.style.left = e.clientX + 'px';
+                cursorGlow.style.top = e.clientY + 'px';
+            }, { passive: true });
+        }
+
+        window.addEventListener('scroll', () => {
+            scrollY = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            if (docHeight > 0) {
+                const progress = (scrollY / docHeight) * 100;
+                scrollTracker.style.width = progress + '%';
+            }
+        }, { passive: true });
+
+        // Throttle resize for smooth response
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                siteCamera.aspect = window.innerWidth / window.innerHeight;
+                siteCamera.updateProjectionMatrix();
+                siteRenderer.setSize(window.innerWidth, window.innerHeight);
+
+                introCamera.aspect = window.innerWidth / window.innerHeight;
+                introCamera.updateProjectionMatrix();
+                introRenderer.setSize(window.innerWidth, window.innerHeight);
+            }, 100);
+        });
+
+        // 60FPS RAF Animation Pipeline
+        let siteClock = new THREE.Clock();
+        function animateMainSiteCanvas() {
+            requestAnimationFrame(animateMainSiteCanvas);
+            const t = siteClock.getElapsedTime();
+
+            mouseX += (targetMouseX - mouseX) * 0.05;
+            mouseY += (targetMouseY - mouseY) * 0.05;
+
+            cursorPointLight.position.set(mouseX * 15, -mouseY * 15, 8);
+            siteCamera.position.y = -scrollY * 0.007;
+
+            morphGroup.rotation.x = t * 0.12 + (mouseY * 0.3);
+            morphGroup.rotation.y = t * 0.16 + (mouseX * 0.4);
+            cyberRing.rotation.z = -t * 0.2;
+
+            // Harmonious floating shards
+            floatingPetals.forEach(petal => {
+                petal.rotation.x += petal.userData.rotSpeedX;
+                petal.rotation.y += petal.userData.rotSpeedY;
+                petal.position.y += Math.sin(t + petal.userData.seed) * 0.015;
+            });
+
+            // Interactive cosmic particle wave oscillations
+            const positions = starGeo.attributes.position.array;
+            for (let i = 0; i < starCount; i++) {
+                const idx = i * 3;
+                positions[idx + 1] = initialY[i] + Math.sin(t * 1.5 + positions[idx] * 0.2) * 1.5;
+            }
+            starGeo.attributes.position.needsUpdate = true;
+            starMesh.rotation.y = t * 0.02 + (mouseX * 0.08);
+
+            siteRenderer.render(siteScene, siteCamera);
+        }
+        animateMainSiteCanvas();
+
+        // 3D Tilt Card Parallax (Auto-bypassed on touch devices for maximum performance)
+        if (!isMobileDevice) {
+            document.querySelectorAll('.glass-panel').forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left - rect.width / 2;
+                    const y = e.clientY - rect.top - rect.height / 2;
+                    card.style.transform = `perspective(1000px) rotateX(${-y * 0.025}deg) rotateY(${x * 0.025}deg) translateY(-8px) scale(1.015)`;
+                }, { passive: true });
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px) scale(1)`;
+                }, { passive: true });
+            });
+        }
+    </script>
+
+    <!-- =====================================================================
+         3. FIREBASE & AUTHENTICATION
+    ====================================================================== -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-analytics.js";
-        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, signOut, onAuthStateChanged, getRedirectResult } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCW_kQKCf9iQRjyB2O0Vv7jNbmoURsIgc0",
@@ -1161,122 +1737,77 @@
         };
 
         const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
+        provider.setCustomParameters({ prompt: 'select_account' });
 
         window.firebaseAuth = auth;
 
-        window.handleGoogleSignIn = function() {
+        getRedirectResult(auth).then((result) => {
+            if (result && result.user) {
+                updateUIWithUser(result.user);
+            }
+        }).catch(err => console.log("Redirect check:", err));
+
+        window.handleGoogleSignIn = async function() {
             if (auth.currentUser) {
-                signOut(auth).then(() => {
+                try {
+                    await signOut(auth);
+                    localStorage.removeItem('creator_user');
                     alert("Signed out successfully.");
-                }).catch((error) => { console.error(error); });
+                    updateUIWithUser(null);
+                } catch(e) { console.error(e); }
             } else {
-                signInWithPopup(auth, provider).then((result) => {
-                    alert(`Welcome back, ${result.user.displayName}! You are signed in.`);
-                }).catch((error) => {
-                    alert("Google Sign-In note: Make sure your domain is authorized in your Firebase Console under Authentication settings.");
-                });
+                try {
+                    const result = await signInWithPopup(auth, provider);
+                    updateUIWithUser(result.user);
+                    alert(`Welcome, ${result.user.displayName || 'Creator Client'}! Signed in successfully.`);
+                } catch (error) {
+                    console.warn("Popup blocked or failed, falling back to redirect:", error);
+                    try {
+                        await signInWithRedirect(auth, provider);
+                    } catch(redirectErr) {
+                        alert("Sign-In Note: Please ensure your domain/URL is added to 'Authorized domains' in your Firebase Authentication Console.");
+                    }
+                }
             }
         };
 
-        onAuthStateChanged(auth, (user) => {
+        function updateUIWithUser(user) {
             const greeting = document.getElementById('userGreeting');
             const nameDisplay = document.getElementById('userNameDisplay');
             const authBtn = document.getElementById('authActionButton');
+            const heroBtnText = document.getElementById('heroGoogleBtnText');
 
             if (user) {
-                nameDisplay.innerText = user.displayName || user.email;
+                const name = user.displayName || user.email.split('@')[0];
+                nameDisplay.innerText = name;
                 greeting.style.display = 'inline';
                 authBtn.innerText = 'Sign Out';
+                if(heroBtnText) heroBtnText.innerText = `Signed In: ${name}`;
+                localStorage.setItem('creator_user', JSON.stringify({ name: name, email: user.email }));
             } else {
                 greeting.style.display = 'none';
                 authBtn.innerText = 'Sign In with Google';
+                if(heroBtnText) heroBtnText.innerText = 'Sign In with Google';
+                localStorage.removeItem('creator_user');
             }
+        }
+
+        onAuthStateChanged(auth, (user) => {
+            updateUIWithUser(user);
         });
     </script>
 
-    <!-- UI & GENERAL JAVASCRIPT ENGINE -->
+    <!-- =====================================================================
+         4. AI ASSISTANT & APPLICATION LOGIC
+    ====================================================================== -->
     <script>
-        // BACKGROUND ENGINE
-        const canvas = document.getElementById('particle-canvas');
-        const ctx = canvas.getContext('2d');
-        
-        let width, height;
-        let particles = [];
-        const highTechColors = ['#00f3ff', '#7928ca', '#00bcd4', '#3f51b5', '#2196f3', '#009688', '#4caf50'];
-
-        function resizeCanvas() {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
-        class Particle {
-            constructor() {
-                this.x = Math.random() * width;
-                this.y = Math.random() * height;
-                this.vx = (Math.random() - 0.5) * 1.2;
-                this.vy = (Math.random() - 0.5) * 1.2;
-                this.radius = Math.random() * 2.2 + 1;
-                this.color = highTechColors[Math.floor(Math.random() * highTechColors.length)];
-                this.alpha = Math.random() * 0.5 + 0.2;
-            }
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-                if (this.x < 0 || this.x > width) this.vx *= -1;
-                if (this.y < 0 || this.y > height) this.vy *= -1;
-            }
-            draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                ctx.fillStyle = this.color;
-                ctx.globalAlpha = this.alpha;
-                ctx.shadowBlur = 12;
-                ctx.shadowColor = this.color;
-                ctx.fill();
-                ctx.globalAlpha = 1;
-                ctx.shadowBlur = 0;
-            }
-        }
-
-        const particleCount = window.innerWidth < 768 ? 40 : 95;
-        for (let i = 0; i < particleCount; i++) { particles.push(new Particle()); }
-
-        function animateCanvas() {
-            ctx.clearRect(0, 0, width, height);
-            for(let i=0; i<particles.length; i++) {
-                for(let j=i+1; j<particles.length; j++) {
-                    const dx = particles[i].x - particles[j].x;
-                    const dy = particles[i].y - particles[j].y;
-                    const dist = Math.sqrt(dx*dx + dy*dy);
-                    if(dist < 110) {
-                        ctx.beginPath();
-                        ctx.moveTo(particles[i].x, particles[i].y);
-                        ctx.lineTo(particles[j].x, particles[j].y);
-                        ctx.strokeStyle = particles[i].color;
-                        ctx.globalAlpha = (110 - dist) / 450;
-                        ctx.lineWidth = 0.9;
-                        ctx.stroke();
-                        ctx.globalAlpha = 1;
-                    }
-                }
-                particles[i].update();
-                particles[i].draw();
-            }
-            requestAnimationFrame(animateCanvas);
-        }
-        animateCanvas();
-
-        // NAVBAR SCROLL & MOBILE TOGGLE
         const header = document.getElementById('header');
         window.addEventListener('scroll', () => {
             if (window.scrollY > 40) { header.classList.add('scrolled'); } 
             else { header.classList.remove('scrolled'); }
-        });
+        }, { passive: true });
 
         const mobileBtn = document.getElementById('mobile-menu-btn');
         const navLinks = document.getElementById('nav-links');
@@ -1292,7 +1823,7 @@
             });
         });
 
-        // PRICING CALCULATOR
+        // Pricing Calculator Logic
         let selectedBasePrice = 2500;
         const optionCards = document.querySelectorAll('.calc-option-card');
         const pagesSlider = document.getElementById('pages-slider');
@@ -1337,7 +1868,7 @@
             totalPriceDisplay.innerText = "₹" + finalPrice.toLocaleString('en-IN');
         }
 
-        // QR CODE & PAYMENT MODAL
+        // UPI QR Modal System
         const qrModalOverlay = document.getElementById('qr-modal-overlay');
         const modalCloseBtn = document.getElementById('modal-close-btn');
         const modalPriceText = document.getElementById('modal-price-text');
@@ -1388,18 +1919,7 @@
             }, 1000);
         }
 
-        function handlePaymentCompletion() {
-            const userName = prompt("Payment completed! Please enter your Name for confirmation:", "Valued Client");
-            if (userName !== null) {
-                const preWrittenMsg = encodeURIComponent(`Hi Abhayraj, I have completed the payment of ₹${getCurrentPrice()}. My name is ${userName}. Please start building my website.`);
-                window.location.href = `https://wa.me/919306882926?text=${preWrittenMsg}`;
-            }
-        }
-
-        gpayLink.addEventListener('click', (e) => { e.preventDefault(); window.location.href = gpayLink.href; setTimeout(handlePaymentCompletion, 1500); });
-        paytmLink.addEventListener('click', (e) => { e.preventDefault(); window.location.href = paytmLink.href; setTimeout(handlePaymentCompletion, 1500); });
-
-        // SUBSCRIPTION FLOW WITH SIGN-UP FIRST CHECK & ADMIN NOTIFICATION
+        // Subscription Modal
         function openSubscriptionFlow() {
             const modal = document.getElementById('subModalOverlay');
             const nameGroup = document.getElementById('subNameGroup');
@@ -1451,13 +1971,11 @@
 
         function processSubscription(e) {
             e.preventDefault();
-            
             if (!window.firebaseAuth || !window.firebaseAuth.currentUser) {
                 closeSubscriptionFlow();
                 handleGoogleSignIn();
                 return;
             }
-
             const user = window.firebaseAuth.currentUser;
             const name = document.getElementById('subNameInput').value || user.displayName || "Client";
             const phone = document.getElementById('subPhoneInput').value || "Not Provided";
@@ -1465,11 +1983,9 @@
 
             closeSubscriptionFlow();
 
-            // Notify Admin via WhatsApp about subscription intent & open WhatsApp notification window
             const adminMsg = encodeURIComponent(`🚨 NEW SUBSCRIPTION BOUGHT!\n\nName: ${name}\nEmail: ${email}\nPhone: ${phone}\nPlan: Creator Elite Club (₹2,500/yr)\n\nPlease verify payment & activate account.`);
             window.open(`https://wa.me/919306882926?text=${adminMsg}`, '_blank');
 
-            // Open Payment QR
             const subPrice = 2500;
             modalPriceText.innerText = "₹" + subPrice.toLocaleString('en-IN');
             const upiId = "9306882926@ptyes";
@@ -1484,7 +2000,7 @@
         }
         window.processSubscription = processSubscription;
 
-        // FEEDBACK WORD LIMIT & WHATSAPP
+        // Feedback Word Counter
         const feedbackForm = document.getElementById('feedbackForm');
         const feedbackText = document.getElementById('feedbackText');
         const wordCounterDisplay = document.getElementById('word-counter-display');
@@ -1513,22 +2029,63 @@
             window.location.href = whatsappUrl;
         });
 
-        // FLOATING AI ASSISTANT WIDGET TOGGLE
+        // AI Assistant Functions
         function toggleAIChat() {
             const popup = document.getElementById('aiChatPopup');
             popup.classList.toggle('active');
         }
         window.toggleAIChat = toggleAIChat;
 
-        // AI ASSISTANT LOGIC
-        const knowledgeBase = [
-        { keywords: ['time', 'days', 'long', 'build', 'rapid'], response: 'Our standard website building time is approx 7 days from project confirmation!' },
-            { keywords: ['domain', 'custom', 'advance', 'rs 1000', '1000'], response: 'Custom domain names are available upon an advance payment of Rs 1,000 or above. Premium members get custom domains without advance payment!' },
-            { keywords: ['cancel', 'refund', 'money', 'policy'], response: 'You can cancel anytime before work starts. Once submitted and active work begins, cancellation is locked until completion. Refunds require re-assigning the project back to Creator Abhayraj.' },
-            { keywords: ['premium', '2500', 'year', 'club', 'membership', 'subscription'], response: 'Our Premium Subscription is Rs 2,500/year, featuring free custom domains without advance payment, rapid priority service, and full support!' },
-            { keywords: ['instagram', 'contact', 'connect', 'abhayraj', 'handle'], response: 'You can connect directly via Instagram at @creator_abhayraj pinned at the top of the page, or call 9306882926!' },
-            { keywords: ['pricing', 'cost', 'price', 'calculator'], response: 'Our pricing starts at Rs 2,500 for portfolios. You can use our interactive Instant Calculator above to configure your exact project cost!' }
+        function askQuickPrompt(promptText) {
+            document.getElementById('userInput').value = promptText;
+            sendMessage();
+        }
+        window.askQuickPrompt = askQuickPrompt;
+
+        const advancedKnowledge = [
+            {
+                patterns: ['price', 'pricing', 'cost', 'how much', 'rate', 'package', 'charges'],
+                reply: "Our elite web builds start at ₹2,500 for single-page portfolios, ₹4,000 for business layouts, ₹6,000 for e-commerce, and ₹8,500 for full web applications. Each additional page is just ₹500! You can use our live Instant Calculator right on the page."
+            },
+            {
+                patterns: ['time', 'days', 'how long', 'timeline', 'delivery', 'fast', 'duration'],
+                reply: "We deliver full production-ready websites in approximately 7 days! Need express rush delivery? Elite Club members get priority queue status."
+            },
+            {
+                patterns: ['domain', 'custom domain', 'url', 'dot com', 'advance', '1000'],
+                reply: "Custom domain registration (e.g. yourbrand.com with free SSL) is integrated upon an advance payment of ₹1,000+. If you join the Creator Elite Club (₹2,500/year), your custom domain is 100% included with zero advance!"
+            },
+            {
+                patterns: ['contact', 'call', 'phone', 'whatsapp', 'reach', 'talk', 'number', 'mobile'],
+                reply: "You can reach Abhayraj directly at +91 9306882926 or via WhatsApp by tapping the green icon on the bottom left! You can also DM on Instagram @creator_abhayraj."
+            },
+            {
+                patterns: ['subscription', 'club', 'membership', 'vip', 'elite'],
+                reply: "The Creator Elite Club is ₹2,500/year. It includes: Free custom domain setup without advance payments, year-round maintenance edits, and priority build queue for all your projects."
+            },
+            {
+                patterns: ['cancel', 'refund', 'money back', 'guarantee', 'policy'],
+                reply: "You have 100% freedom to cancel before official coding starts. Once active build work begins, cancellations lock until delivery. Full valid refunds require transferring project files back to Creator Abhayraj."
+            },
+            {
+                patterns: ['technology', 'stack', 'code', 'framework', 'react', 'three', 'firebase'],
+                reply: "We engineer interfaces using high-performance HTML5/WebGL, Three.js 3D shaders, real-time Firebase Authentication, automated UPI payment gateways, and custom glassmorphism design systems."
+            },
+            {
+                patterns: ['who are you', 'about', 'creator', 'abhayraj'],
+                reply: "I am the architectural AI for Creator Abhayraj (+150 web projects deployed). Abhayraj specializes in cinematic, ultra-fast websites engineered to turn visitors into paying clients."
+            }
         ];
+
+        function findBestAIResponse(userInput) {
+            const query = userInput.toLowerCase();
+            for (let item of advancedKnowledge) {
+                if (item.patterns.some(pattern => query.includes(pattern))) {
+                    return item.reply;
+                }
+            }
+            return "That's an important project requirement! I've noted that. Would you like to speak directly with Abhayraj? Call 9306882926 or tap 'Continue to Secure Payment' in our calculator above.";
+        }
 
         function sendMessage() {
             const input = document.getElementById('userInput');
@@ -1538,18 +2095,17 @@
             appendMessage(text, 'user');
             input.value = '';
 
+            const chatContainer = document.getElementById('chatMessages');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message bot typing-indicator';
+            typingDiv.innerText = 'Neural AI is computing response...';
+            chatContainer.appendChild(typingDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+
             setTimeout(() => {
-                let botReply = "That's a great question! For specific custom requirements, feel free to DM us on Instagram @creator_abhayraj or call 9306882926.";
-                const lowerText = text.toLowerCase();
-
-                for (let item of knowledgeBase) {
-                    if (item.keywords.some(kw => lowerText.includes(kw))) {
-                        botReply = item.response;
-                        break;
-                    }
-                }
-
-                appendMessage(botReply, 'bot');
+                chatContainer.removeChild(typingDiv);
+                const reply = findBestAIResponse(text);
+                appendMessage(reply, 'bot');
             }, 600);
         }
         window.sendMessage = sendMessage;
@@ -1566,7 +2122,7 @@
             container.scrollTop = container.scrollHeight;
         }
 
-        // MASCOT WITH REDIRECTION LINKS
+        // Mascot Interactive Loop
         const mascotMessages = [
             { text: "⚡ Style in motion! Click here to configure pricing!", link: "#calculator" },
             { text: "👑 Unlock VIP perks with our Subscription Club! Click to view!", link: "#premium" },
@@ -1585,8 +2141,6 @@
             const bubble = document.getElementById('mascotSpeech');
             const current = mascotMessages[currentMascotIndex];
             bubble.innerText = current.text;
-            bubble.style.transform = 'scale(1.08)';
-            setTimeout(() => { bubble.style.transform = 'scale(1)'; }, 300);
         }
 
         function handleMascotBubbleClick() {
@@ -1604,11 +2158,15 @@
             updateMascotBubble();
         }, 8000);
 
-        // SCROLL REVEAL OBSERVER
+        // Hardware-Accelerated Intersection Observer
         const revealElements = document.querySelectorAll('.reveal');
         const revealObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('active'); } });
-        }, { threshold: 0.1 });
+            entries.forEach(entry => { 
+                if (entry.isIntersecting) { 
+                    entry.target.classList.add('active'); 
+                } 
+            });
+        }, { threshold: 0.08 });
         revealElements.forEach(el => revealObserver.observe(el));
     </script>
 </body>
